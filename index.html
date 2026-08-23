@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Daily Routine — Personal Planner</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect rx=%2224%22 width=%22100%22 height=%22100%22 fill=%22%235B6EF5%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22>D</text></svg>">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23f7fbfb'/%3E%3Ccircle cx='50' cy='47' r='27' fill='none' stroke='%233b9bb7' stroke-width='7'/%3E%3Cpath d='M50 47V28M50 47l-10 15' stroke='%232c78a3' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M24 66c10 13 25 17 40 10 10-5 16-14 18-25' fill='none' stroke='%23f6a34a' stroke-width='7' stroke-linecap='round'/%3E%3Cpath d='M72 24c8 4 13 10 15 18' fill='none' stroke='%2371c9a2' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -56,7 +56,8 @@ button{font-family:inherit;}
   padding:22px 16px; position:sticky; top:0; height:100vh; display:flex; flex-direction:column; gap:6px;
 }
 .brand{display:flex; align-items:center; gap:10px; padding:6px 10px 22px;}
-.brand-mark{width:34px; height:34px; border-radius:10px; background:linear-gradient(140deg,var(--brand),#8B6BFF); display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:700; box-shadow:var(--shadow);}
+.brand-mark{width:34px; height:34px; border-radius:10px; background:#f7fbfb; display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:var(--shadow);}
+.brand-mark svg{width:100%; height:100%; display:block;}
 .brand-name{font-family:var(--font-display); font-weight:700; font-size:17px;}
 .brand-sub{font-size:11px; color:var(--text-faint); margin-top:-2px;}
 .nav-item{
@@ -292,7 +293,7 @@ button{font-family:inherit;}
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="brand-mark">D</div>
+      <div class="brand-mark" aria-label="Daily Routine logo"><svg viewBox="0 0 100 100" role="img" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#f7fbfb"/><circle cx="50" cy="47" r="27" fill="none" stroke="#3b9bb7" stroke-width="7"/><path d="M50 47V28M50 47l-10 15" stroke="#2c78a3" stroke-width="6" stroke-linecap="round"/><path d="M24 66c10 13 25 17 40 10 10-5 16-14 18-25" fill="none" stroke="#f6a34a" stroke-width="7" stroke-linecap="round"/><path d="M72 24c8 4 13 10 15 18" fill="none" stroke="#71c9a2" stroke-width="7" stroke-linecap="round"/><path d="M22 38l7 7 13-14" fill="none" stroke="#62bea1" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div>
         <div class="brand-name">Daily Routine</div>
         <div class="brand-sub">Personal Planner</div>
@@ -307,7 +308,7 @@ button{font-family:inherit;}
   <!-- MAIN -->
   <main class="main">
     <div class="topbar">
-      <div class="brand"><div class="brand-mark" style="width:30px;height:30px;font-size:14px;">D</div><div class="brand-name" style="font-size:15px;">Daily Routine</div></div>
+      <div class="brand"><div class="brand-mark" style="width:30px;height:30px;" aria-label="Daily Routine logo"><svg viewBox="0 0 100 100" role="img" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#f7fbfb"/><circle cx="50" cy="47" r="27" fill="none" stroke="#3b9bb7" stroke-width="7"/><path d="M50 47V28M50 47l-10 15" stroke="#2c78a3" stroke-width="6" stroke-linecap="round"/><path d="M24 66c10 13 25 17 40 10 10-5 16-14 18-25" fill="none" stroke="#f6a34a" stroke-width="7" stroke-linecap="round"/><path d="M72 24c8 4 13 10 15 18" fill="none" stroke="#71c9a2" stroke-width="7" stroke-linecap="round"/><path d="M22 38l7 7 13-14" fill="none" stroke="#62bea1" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="brand-name" style="font-size:15px;">Daily Routine</div></div>
       <button class="btn btn-sm" id="themeToggleBtnMobile">🌙</button>
     </div>
 
@@ -478,12 +479,20 @@ button{font-family:inherit;}
         <div class="progress-track"><div class="progress-fill" id="studyProgressBar" style="width:0%;"></div></div>
       </div>
       <div class="card" style="margin-bottom:16px;">
-        <div class="section-title">📚 Jadwal TKA & UTBK Hari Ini</div>
-        <div id="studyScheduleToday"></div>
+        <div class="section-title">☀️ Pagi — TKA | 07.00–08.00</div>
+        <div id="studyScheduleTkaToday"></div>
       </div>
       <div class="card" style="margin-bottom:16px;">
-        <div class="section-title">🗓️ Jadwal Mingguan</div>
-        <div id="studyScheduleWeek"></div>
+        <div class="section-title">🌙 Malam — UTBK | 20.00–21.00</div>
+        <div id="studyScheduleUtbkToday"></div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="section-title">📚 Jadwal TKA Senin–Jumat</div>
+        <div id="studyScheduleTkaWeek"></div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="section-title">🧠 Jadwal UTBK Senin–Jumat</div>
+        <div id="studyScheduleUtbkWeek"></div>
       </div>
       <div id="studyList"></div>
     </section>
@@ -646,11 +655,11 @@ const WORKOUT_SCHEDULE = {
   0: {label:'Minggu', exercises:[]}
 };
 const STUDY_SCHEDULE = {
-  1: {label:'Senin', tka:{subject:'🖥️ Kejuruan', focus:'Pelajari konsep/materi dasar → pahami teori, istilah, dan fungsi'}, utbk:{subject:'🧠 PU', focus:'Logika, pola, hubungan sebab-akibat, analisis informasi'}},
-  2: {label:'Selasa', tka:{subject:'🧪 KIK', focus:'Pelajari konsep + rumus/materi penting → buat rangkuman singkat'}, utbk:{subject:'🔢 PK', focus:'Operasi bilangan, aljabar, perbandingan, persentase, peluang'}},
-  3: {label:'Rabu', tka:{subject:'🖥️ Kejuruan', focus:'Latihan soal → 15–25 soal + bahas semua kesalahan'}, utbk:{subject:'📖 PPU', focus:'Kosakata, makna kata, informasi tersurat/tersirat, hubungan antargagasan'}},
-  4: {label:'Kamis', tka:{subject:'🧪 KIK', focus:'Latihan soal → 15–25 soal + bahas kesalahan'}, utbk:{subject:'✍️ PBM', focus:'Ide pokok, kalimat efektif, struktur paragraf, hubungan antarkalimat'}},
-  5: {label:'Jumat', tka:{subject:'🖥️ + 🧪', focus:'Evaluasi TKA → soal campuran Kejuruan & KIK + review materi yang masih lemah'}, utbk:{subject:'🇮🇩🇬🇧 Literasi', focus:'Indonesia: analisis bacaan & inferensi • Inggris: reading, vocabulary & inference'}}
+  1: {label:'Senin', tka:{subject:'🔢 Matematika', focus:'Aljabar, persamaan, fungsi, perbandingan, dan latihan soal'}, utbk:{subject:'🧠 Penalaran Umum', focus:'Logika, pola, hubungan antar-informasi, analisis, dan penarikan kesimpulan'}},
+  2: {label:'Selasa', tka:{subject:'Bahasa Indonesia', focus:'Pemahaman bacaan, ide pokok, makna kata, simpulan, dan analisis teks'}, utbk:{subject:'🔢 Pengetahuan Kuantitatif', focus:'Bilangan, aljabar, perbandingan, persentase, geometri, peluang, dan soal hitungan'}},
+  3: {label:'Rabu', tka:{subject:'Bahasa Inggris', focus:'Vocabulary, grammar dasar, reading comprehension, dan mencari informasi dari teks'}, utbk:{subject:'📖 Pengetahuan dan Pemahaman Umum', focus:'Makna kata, hubungan kata, informasi dalam teks, dan pemahaman konsep'}},
+  4: {label:'Kamis', tka:{subject:'💻 Kejuruan', focus:'Materi produktif sesuai jurusan RPL + latihan soal'}, utbk:{subject:'✍️ Pemahaman Bacaan dan Menulis', focus:'Ide pokok, struktur paragraf, kalimat efektif, ejaan, dan hubungan antarkalimat'}},
+  5: {label:'Jumat', tka:{subject:'🧪 KIK', focus:'Materi KIK + latihan soal dan evaluasi'}, utbk:{subject:'Literasi Bahasa Indonesia & Literasi Bahasa Inggris', focus:'Memahami bacaan, mencari informasi tersirat, membuat kesimpulan, vocabulary, dan inference'}}
 };
 
 /* ============================== HELPERS ============================== */
@@ -1086,22 +1095,29 @@ function computeStudyStreak(){
 }
 function renderStudySchedule(){
   const todaySchedule = STUDY_SCHEDULE[new Date().getDay()];
-  const todayEl = document.getElementById('studyScheduleToday');
-  const weekEl = document.getElementById('studyScheduleWeek');
+  const tkaTodayEl = document.getElementById('studyScheduleTkaToday');
+  const utbkTodayEl = document.getElementById('studyScheduleUtbkToday');
+  const tkaWeekEl = document.getElementById('studyScheduleTkaWeek');
+  const utbkWeekEl = document.getElementById('studyScheduleUtbkWeek');
   if(!todaySchedule){
-    todayEl.innerHTML = '<div class="empty" style="padding:20px 4px;"><div class="em-ic">😴</div><div class="em-title">Tidak ada jadwal tetap</div><div class="em-sub">Gunakan hari ini untuk istirahat atau mengejar materi.</div></div>';
+    const empty = '<div class="empty" style="padding:20px 4px;"><div class="em-ic">😴</div><div class="em-title">Tidak ada jadwal tetap</div><div class="em-sub">Gunakan hari ini untuk istirahat atau mengejar materi.</div></div>';
+    tkaTodayEl.innerHTML = empty;
+    utbkTodayEl.innerHTML = empty;
   } else {
-    todayEl.innerHTML = [
-      {time:'07.00–08.00', label:'TKA', data:todaySchedule.tka, tone:'chip-blue'},
-      {time:'20.00–21.00', label:'UTBK', data:todaySchedule.utbk, tone:'chip-purple'}
-    ].map(item=>`<div class="workout-card">
-      <div class="wc-ic" style="background:var(--${item.label==='TKA'?'blue':'purple'}-bg); color:var(--${item.label==='TKA'?'blue':'purple'});">${item.label==='TKA'?'📚':'🧠'}</div>
-      <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:13.5px;">${item.time} <span class="chip ${item.tone}" style="margin-left:4px;">${item.label}</span></div><div style="font-size:13px; margin-top:4px;">${item.data.subject}</div><div class="row-desc" style="margin-top:3px;">${item.data.focus}</div></div>
-    </div>`).join('');
+    const scheduleCard = (item, tone, icon) => `<div class="workout-card">
+      <div class="wc-ic" style="background:var(--${tone}-bg); color:var(--${tone});">${icon}</div>
+      <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:13.5px;">${item.time}</div><div style="font-size:13px; margin-top:4px;">${item.data.subject}</div><div class="row-desc" style="margin-top:3px;">${item.data.focus}</div></div>
+    </div>`;
+    tkaTodayEl.innerHTML = scheduleCard({time:'07.00–08.00', data:todaySchedule.tka}, 'blue', '📚');
+    utbkTodayEl.innerHTML = scheduleCard({time:'20.00–21.00', data:todaySchedule.utbk}, 'purple', '🧠');
   }
-  weekEl.innerHTML = Object.values(STUDY_SCHEDULE).map(schedule=>`<div class="workout-card">
+  tkaWeekEl.innerHTML = Object.values(STUDY_SCHEDULE).map(schedule=>`<div class="workout-card">
     <div class="wc-ic" style="background:var(--blue-bg); color:var(--blue);">📚</div>
-    <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:13.5px;">${schedule.label}</div><div class="row-desc" style="margin-top:4px;"><b>07.00–08.00 TKA · ${schedule.tka.subject}</b><br>${schedule.tka.focus}</div><div class="row-desc" style="margin-top:5px;"><b>20.00–21.00 UTBK · ${schedule.utbk.subject}</b><br>${schedule.utbk.focus}</div></div>
+    <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:13.5px;">${schedule.label}</div><div class="row-desc" style="margin-top:4px;"><b>07.00–08.00 · ${schedule.tka.subject}</b><br>${schedule.tka.focus}</div></div>
+  </div>`).join('');
+  utbkWeekEl.innerHTML = Object.values(STUDY_SCHEDULE).map(schedule=>`<div class="workout-card">
+    <div class="wc-ic" style="background:var(--purple-bg); color:var(--purple);">🧠</div>
+    <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:13.5px;">${schedule.label}</div><div class="row-desc" style="margin-top:4px;"><b>20.00–21.00 · ${schedule.utbk.subject}</b><br>${schedule.utbk.focus}</div></div>
   </div>`).join('');
 }
 function renderStudy(){
