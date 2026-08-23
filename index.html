@@ -3,1342 +3,1589 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Lumina — Personal Life Management</title>
+<title>Daily Routine — Personal Planner</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect rx=%2224%22 width=%22100%22 height=%22100%22 fill=%22%235B6EF5%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22>D</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ===================== TOKENS ===================== */
 :root{
-  --bg:#F6F4FB;
-  --bg-alt:#EFEBF9;
-  --surface:#FFFFFF;
-  --surface-2:#FBFAFE;
-  --border:#E7E3F2;
-  --text:#232A3B;
-  --text-muted:#727C93;
-  --text-faint:#A2AABF;
-
-  --primary:#3DA5A0;
-  --primary-dark:#2C7A75;
-  --primary-tint:#E4F4F2;
-  --accent:#FF8C6B;
-  --accent-tint:#FFEEE7;
-
-  --green:#48B583;
-  --green-tint:#E4F6ED;
-  --yellow:#F2AE3D;
-  --yellow-tint:#FBF0DC;
-  --red:#EF6167;
-  --red-tint:#FCE7E8;
-
-  --shadow-sm: 0 1px 2px rgba(35,42,59,0.05), 0 1px 1px rgba(35,42,59,0.03);
-  --shadow-md: 0 8px 24px rgba(48,40,90,0.08);
-  --shadow-lg: 0 20px 50px rgba(48,40,90,0.14);
-
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-
-  --font-display:'Fredoka', sans-serif;
-  --font-body:'Inter', sans-serif;
-  --font-mono:'JetBrains Mono', monospace;
-
-  --nav-w: 232px;
-  --bottom-h: 72px;
+  --bg:#F5F6FA; --surface:#FFFFFF; --surface-2:#EEF0F7; --border:#E3E6F0;
+  --text:#171A2B; --text-dim:#6B7086; --text-faint:#9BA0B4;
+  --brand:#5B6EF5; --brand-dim:#EEF0FE;
+  --green:#1DA463; --green-bg:#E4F8ED;
+  --red:#E0435F; --red-bg:#FCEAEE;
+  --yellow:#D98F1B; --yellow-bg:#FDF2E0;
+  --purple:#8A5CF0; --purple-bg:#F1EAFE;
+  --orange:#F0793C; --orange-bg:#FEEDE2;
+  --blue:#3E7BFA; --blue-bg:#E8F0FE;
+  --shadow: 0 1px 2px rgba(20,22,40,.04), 0 8px 24px -8px rgba(20,22,40,.10);
+  --shadow-lg: 0 4px 8px rgba(20,22,40,.06), 0 24px 48px -12px rgba(20,22,40,.18);
+  --radius: 18px; --radius-sm: 12px;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
 }
-
-*{box-sizing:border-box; margin:0; padding:0;}
-html{-webkit-tap-highlight-color:transparent;}
+[data-theme="dark"]{
+  --bg:#12131C; --surface:#1B1D2B; --surface-2:#242637; --border:#2E3145;
+  --text:#F1F2F8; --text-dim:#A6A9C0; --text-faint:#6D7089;
+  --brand:#7C8BFF; --brand-dim:#232752;
+  --green:#3CD285; --green-bg:#16301F;
+  --red:#FF6B85; --red-bg:#3A1621;
+  --yellow:#F5B942; --yellow-bg:#3A2C0E;
+  --purple:#B18CFF; --purple-bg:#2A1F4A;
+  --orange:#FF9760; --orange-bg:#3A2211;
+  --blue:#6FA0FF; --blue-bg:#1B2540;
+  --shadow: 0 1px 2px rgba(0,0,0,.2), 0 8px 24px -8px rgba(0,0,0,.4);
+  --shadow-lg: 0 4px 8px rgba(0,0,0,.3), 0 24px 48px -12px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+html,body{height:100%;}
 body{
-  font-family:var(--font-body);
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
+  margin:0; background:var(--bg); color:var(--text); font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased; overflow-x:hidden; transition:background .25s ease, color .25s ease;
 }
-@media (prefers-reduced-motion: reduce){
-  *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
-}
-button{font-family:inherit; cursor:pointer; border:none; background:none; color:inherit;}
-input, textarea, select{font-family:inherit; color:inherit;}
+h1,h2,h3,.disp{font-family:var(--font-display); letter-spacing:-0.02em;}
 a{color:inherit;}
+button{font-family:inherit;}
 ::-webkit-scrollbar{width:8px; height:8px;}
-::-webkit-scrollbar-thumb{background:#D8D3EC; border-radius:8px;}
-:focus-visible{outline:2.5px solid var(--primary); outline-offset:2px; border-radius:6px;}
+::-webkit-scrollbar-thumb{background:var(--border); border-radius:8px;}
+.app{display:flex; min-height:100vh;}
 
-h1,h2,h3,h4{font-family:var(--font-display); font-weight:600; letter-spacing:-0.01em;}
-
-/* ===================== APP SHELL ===================== */
-.app{
-  display:flex;
-  min-height:100vh;
-}
-
-/* ---- Sidebar (desktop) ---- */
+/* ---------- Sidebar (desktop) ---------- */
 .sidebar{
-  width:var(--nav-w);
-  flex-shrink:0;
-  background:var(--surface);
-  border-right:1px solid var(--border);
-  padding:28px 18px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  position:sticky;
-  top:0;
-  height:100vh;
+  width:248px; flex-shrink:0; background:var(--surface); border-right:1px solid var(--border);
+  padding:22px 16px; position:sticky; top:0; height:100vh; display:flex; flex-direction:column; gap:6px;
 }
-.brand{
-  display:flex; align-items:center; gap:10px;
-  padding:6px 10px 26px 10px;
-}
-.brand .mark{
-  width:38px; height:38px; border-radius:12px;
-  background:linear-gradient(135deg, var(--primary), var(--accent));
-  display:flex; align-items:center; justify-content:center;
-  font-size:19px;
-  box-shadow:var(--shadow-sm);
-}
-.brand .name{font-family:var(--font-display); font-size:20px; font-weight:600; color:var(--text);}
-.brand .name span{color:var(--primary);}
-
+.brand{display:flex; align-items:center; gap:10px; padding:6px 10px 22px;}
+.brand-mark{width:34px; height:34px; border-radius:10px; background:linear-gradient(140deg,var(--brand),#8B6BFF); display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:700; box-shadow:var(--shadow);}
+.brand-name{font-family:var(--font-display); font-weight:700; font-size:17px;}
+.brand-sub{font-size:11px; color:var(--text-faint); margin-top:-2px;}
 .nav-item{
-  display:flex; align-items:center; gap:12px;
-  padding:12px 14px;
-  border-radius:var(--radius-sm);
-  font-size:14.5px; font-weight:500;
-  color:var(--text-muted);
-  transition:background .18s ease, color .18s ease, transform .15s ease;
+  display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:12px; cursor:pointer;
+  color:var(--text-dim); font-weight:600; font-size:14px; border:none; background:none; width:100%; text-align:left; transition:.15s;
 }
-.nav-item .ic{font-size:19px; width:22px; text-align:center;}
-.nav-item:hover{background:var(--bg-alt); color:var(--text);}
-.nav-item.active{
-  background:var(--primary-tint);
-  color:var(--primary-dark);
-  font-weight:600;
-}
-.nav-item:active{transform:scale(0.98);}
+.nav-item .ic{font-size:17px; width:20px; text-align:center;}
+.nav-item:hover{background:var(--surface-2); color:var(--text);}
+.nav-item.active{background:var(--brand-dim); color:var(--brand);}
+.sidebar-foot{margin-top:auto; padding-top:12px; border-top:1px solid var(--border);}
 
-.sidebar-foot{
-  margin-top:auto;
-  padding:14px 10px;
-  font-size:12px;
-  color:var(--text-faint);
-  border-top:1px solid var(--border);
-}
+/* ---------- Main ---------- */
+.main{flex:1; min-width:0; padding:24px 28px 100px; max-width:1180px; margin:0 auto; width:100%;}
+.topbar{display:none;}
+.view{display:none; animation:fadein .28s ease;}
+.view.active{display:block;}
+@keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
 
-/* ---- Bottom nav (mobile) ---- */
-.bottom-nav{
-  display:none;
-}
+.page-head{display:flex; justify-content:space-between; align-items:flex-end; gap:12px; margin-bottom:20px; flex-wrap:wrap;}
+.page-title{font-size:26px; font-weight:700; margin:0;}
+.page-sub{color:var(--text-dim); font-size:14px; margin-top:4px;}
 
-/* ===================== MAIN ===================== */
-.main{
-  flex:1;
-  min-width:0;
-  padding:32px 40px 60px 40px;
-}
-.page{display:none; animation:fadeUp .35s ease;}
-.page.active{display:block;}
-@keyframes fadeUp{
-  from{opacity:0; transform:translateY(8px);}
-  to{opacity:1; transform:translateY(0);}
-}
-
-.page-head{
-  display:flex; align-items:flex-end; justify-content:space-between;
-  margin-bottom:22px; flex-wrap:wrap; gap:12px;
-}
-.page-head h1{font-size:26px;}
-.page-head .sub{color:var(--text-muted); font-size:13.5px; margin-top:4px;}
-.eyebrow{
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
-  color:var(--primary-dark); background:var(--primary-tint);
-  display:inline-block; padding:4px 10px; border-radius:99px; margin-bottom:8px;
-}
-
-.card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius-md);
-  box-shadow:var(--shadow-sm);
-  padding:20px;
-}
-
-/* ===================== DASHBOARD ===================== */
-.dash-hero{
-  background:linear-gradient(135deg, #2C7A75 0%, #3DA5A0 55%, #57BDB4 100%);
-  border-radius:var(--radius-lg);
-  padding:30px 32px;
-  color:#fff;
-  display:flex; align-items:center; justify-content:space-between;
-  gap:24px;
-  box-shadow:var(--shadow-md);
-  flex-wrap:wrap;
-  position:relative;
-  overflow:hidden;
-}
-.dash-hero::after{
-  content:"";
-  position:absolute; right:-60px; top:-60px;
-  width:220px; height:220px; border-radius:50%;
-  background:rgba(255,255,255,0.08);
-}
-.dash-hero .greet-day{font-family:var(--font-mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase; opacity:.85;}
-.dash-hero .greet-date{font-family:var(--font-display); font-size:26px; margin:4px 0 12px 0;}
-.dash-hero .greet-line{font-size:14.5px; opacity:.95; max-width:360px; line-height:1.5;}
-.dash-hero .greet-line b{font-weight:600;}
-
-.ring-wrap{display:flex; align-items:center; gap:16px; z-index:1;}
-.ring{position:relative; width:104px; height:104px;}
-.ring svg{transform:rotate(-90deg);}
-.ring .pct{
-  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-  flex-direction:column;
-  font-family:var(--font-mono); font-weight:700; font-size:20px;
-}
-.ring .pct small{font-size:9px; font-weight:500; opacity:.85; font-family:var(--font-body);}
-
-.summary-grid{
-  display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:22px;
-}
-@media (max-width:900px){ .summary-grid{grid-template-columns:repeat(2,1fr);} }
-
-.sum-card{
-  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md);
-  padding:18px; box-shadow:var(--shadow-sm);
-  transition:transform .18s ease, box-shadow .18s ease;
-}
-.sum-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-md);}
-.sum-card .top{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
-.sum-card .icon{
-  width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px;
-}
-.sum-card .label{font-size:12.5px; color:var(--text-muted); font-weight:500;}
-.sum-card .value{font-family:var(--font-mono); font-size:19px; font-weight:700; margin-top:2px;}
-.sum-card .foot{font-size:11.5px; color:var(--text-faint); margin-top:6px;}
-.badge{
-  font-size:10.5px; font-weight:600; padding:3px 9px; border-radius:99px; font-family:var(--font-body);
-}
-.badge.green{background:var(--green-tint); color:var(--green);}
-.badge.yellow{background:var(--yellow-tint); color:var(--yellow);}
-.badge.red{background:var(--red-tint); color:var(--red);}
-.badge.neutral{background:var(--bg-alt); color:var(--text-muted);}
-
-/* ===================== HABIT CALENDAR ===================== */
-.cal-toolbar{display:flex; align-items:center; gap:10px; margin-bottom:16px;}
-.cal-toolbar .month-label{font-family:var(--font-display); font-size:17px; min-width:170px;}
-.icon-btn{
-  width:34px; height:34px; border-radius:10px; background:var(--surface); border:1px solid var(--border);
-  display:flex; align-items:center; justify-content:center; font-size:15px; color:var(--text-muted);
-  transition:background .15s ease;
-}
-.icon-btn:hover{background:var(--bg-alt); color:var(--text);}
-
-.legend{display:flex; gap:14px; margin-left:auto; font-size:12px; color:var(--text-muted); flex-wrap:wrap;}
-.legend span{display:inline-flex; align-items:center; gap:6px;}
-.dot{width:9px; height:9px; border-radius:50%; display:inline-block;}
-.dot.green{background:var(--green);} .dot.yellow{background:var(--yellow);} .dot.red{background:var(--red);} .dot.empty{background:#E4E1F0;}
-
-.cal-grid{
-  display:grid; grid-template-columns:repeat(7,1fr); gap:8px;
-}
-.cal-dow{text-align:center; font-size:11px; color:var(--text-faint); font-weight:600; padding-bottom:6px; text-transform:uppercase; letter-spacing:.04em;}
-.cal-cell{
-  aspect-ratio:1/1; border-radius:12px; background:var(--surface-2); border:1px solid var(--border);
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
-  font-size:13px; font-weight:600; color:var(--text);
-  position:relative; transition:transform .15s ease, box-shadow .15s ease;
-}
-.cal-cell.pad{visibility:hidden;}
-.cal-cell:not(.pad):hover{transform:translateY(-2px); box-shadow:var(--shadow-sm); cursor:pointer;}
-.cal-cell.today{border:1.5px solid var(--primary);}
-.cal-cell .dow-dot{width:6px; height:6px; border-radius:50%; margin-top:3px;}
-.cal-cell.status-green{background:var(--green-tint);}
-.cal-cell.status-yellow{background:var(--yellow-tint);}
-.cal-cell.status-red{background:var(--red-tint);}
-.cal-cell.status-green .dow-dot{background:var(--green);}
-.cal-cell.status-yellow .dow-dot{background:var(--yellow);}
-.cal-cell.status-red .dow-dot{background:var(--red);}
-
-/* ===================== TOGGLE ===================== */
-.toggle-row{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:13px 4px; border-bottom:1px solid var(--border);
-}
-.toggle-row:last-of-type{border-bottom:none;}
-.toggle-row .t-label{display:flex; align-items:center; gap:10px; font-size:14.5px; font-weight:500;}
-.toggle-row .t-label .em{font-size:18px;}
-
-.switch{
-  width:46px; height:27px; border-radius:99px; background:#DFDCEB; position:relative; transition:background .25s ease; flex-shrink:0;
-}
-.switch::after{
-  content:""; position:absolute; top:3px; left:3px; width:21px; height:21px; border-radius:50%;
-  background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.25); transition:transform .25s cubic-bezier(.4,0,.2,1);
-}
-.switch.on{background:var(--green);}
-.switch.on::after{transform:translateX(19px);}
-
-/* ===================== MODAL ===================== */
-.modal-overlay{
-  position:fixed; inset:0; background:rgba(30,25,50,0.42); backdrop-filter:blur(2px);
-  display:none; align-items:flex-end; justify-content:center; z-index:100;
-}
-.modal-overlay.show{display:flex; animation:fadeIn .2s ease;}
-@keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
-.modal{
-  background:var(--surface); width:100%; max-width:480px; border-radius:22px 22px 0 0;
-  padding:24px 22px 28px 22px; max-height:88vh; overflow-y:auto;
-  animation:slideUp .28s cubic-bezier(.2,.8,.2,1);
-  box-shadow:var(--shadow-lg);
-}
-@media (min-width:640px){
-  .modal-overlay{align-items:center;}
-  .modal{border-radius:22px; margin-bottom:0;}
-}
-@keyframes slideUp{from{transform:translateY(40px); opacity:0;} to{transform:translateY(0); opacity:1;}}
-.modal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
-.modal-head h3{font-size:18px;}
-.modal-head .close-x{width:30px; height:30px; border-radius:9px; background:var(--bg-alt); display:flex; align-items:center; justify-content:center; font-size:15px; color:var(--text-muted);}
-.modal-sub{font-size:12.5px; color:var(--text-muted); margin-bottom:18px;}
-
-.section-title{font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint); font-weight:700; margin:18px 0 8px 0;}
-.section-title:first-of-type{margin-top:4px;}
-
-textarea.note-input{
-  width:100%; resize:vertical; min-height:64px; border:1px solid var(--border); border-radius:12px;
-  padding:11px 13px; font-size:13.5px; background:var(--surface-2); line-height:1.5;
-}
-textarea.note-input:focus{border-color:var(--primary);}
-
-.time-row{display:flex; gap:12px;}
-.time-field{flex:1;}
-.time-field label{font-size:12px; color:var(--text-muted); display:block; margin-bottom:6px; font-weight:500;}
-.time-field input[type=time]{
-  width:100%; border:1px solid var(--border); border-radius:12px; padding:10px 12px; font-size:14px;
-  background:var(--surface-2); font-family:var(--font-mono);
-}
-.sleep-result{
-  margin-top:14px; padding:13px 14px; border-radius:14px; background:var(--bg-alt);
-  display:flex; align-items:center; justify-content:space-between; font-size:13.5px;
-}
-.sleep-result .dur{font-family:var(--font-mono); font-weight:700; font-size:16px;}
-
-.modal-actions{display:flex; gap:10px; margin-top:22px;}
 .btn{
-  flex:1; padding:13px; border-radius:13px; font-weight:600; font-size:14px; text-align:center;
-  transition:transform .15s ease, opacity .15s ease;
+  display:inline-flex; align-items:center; gap:8px; border:1px solid var(--border); background:var(--surface);
+  color:var(--text); padding:9px 16px; border-radius:11px; font-weight:600; font-size:13.5px; cursor:pointer; transition:.15s;
 }
-.btn:active{transform:scale(0.97);}
-.btn-primary{background:var(--primary); color:#fff; box-shadow:0 6px 16px rgba(61,165,160,0.35);}
-.btn-ghost{background:var(--bg-alt); color:var(--text-muted);}
+.btn:hover{border-color:var(--brand); color:var(--brand);}
+.btn-primary{background:var(--brand); border-color:var(--brand); color:#fff;}
+.btn-primary:hover{filter:brightness(1.08); color:#fff;}
+.btn-ghost{border-color:transparent; background:transparent;}
+.btn-sm{padding:6px 11px; font-size:12.5px; border-radius:9px;}
+.btn-danger{color:var(--red); border-color:var(--red-bg);}
+.btn-danger:hover{background:var(--red-bg); color:var(--red);}
+.btn:disabled{opacity:.5; cursor:not-allowed;}
 
-/* ===================== WORKOUT ===================== */
-.week-strip{display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; margin-bottom:20px;}
-.day-chip{
-  flex-shrink:0; min-width:76px; padding:12px 10px; border-radius:16px; background:var(--surface);
-  border:1px solid var(--border); text-align:center; transition:all .18s ease;
+/* ---------- Cards / grid ---------- */
+.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px 18px; box-shadow:var(--shadow);}
+.grid{display:grid; gap:16px;}
+.grid-2{grid-template-columns:1fr 1fr;}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+@media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr 1fr;}}
+@media(max-width:640px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
+
+.stat-card{display:flex; flex-direction:column; gap:6px;}
+.stat-num{font-family:var(--font-display); font-size:26px; font-weight:700;}
+.stat-label{font-size:12.5px; color:var(--text-dim); font-weight:600;}
+.stat-icon{width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:18px; margin-bottom:4px;}
+
+.chip{display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:999px; font-size:11.5px; font-weight:700;}
+.chip-green{background:var(--green-bg); color:var(--green);}
+.chip-red{background:var(--red-bg); color:var(--red);}
+.chip-yellow{background:var(--yellow-bg); color:var(--yellow);}
+.chip-purple{background:var(--purple-bg); color:var(--purple);}
+.chip-orange{background:var(--orange-bg); color:var(--orange);}
+.chip-blue{background:var(--blue-bg); color:var(--blue);}
+.chip-gray{background:var(--surface-2); color:var(--text-dim);}
+
+.progress-track{height:9px; border-radius:999px; background:var(--surface-2); overflow:hidden;}
+.progress-fill{height:100%; border-radius:999px; background:var(--brand); transition:width .5s cubic-bezier(.4,0,.2,1);}
+
+.hero-ring-wrap{display:flex; align-items:center; gap:18px;}
+.ring{width:74px; height:74px; flex-shrink:0;}
+.ring circle{fill:none; stroke-width:8;}
+.ring .track{stroke:var(--surface-2);}
+.ring .fill{stroke:var(--brand); stroke-linecap:round; transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1); transform:rotate(-90deg); transform-origin:50% 50%;}
+
+/* ---------- Timeline (signature element) ---------- */
+.timeline{position:relative; padding-left:6px;}
+.tl-item{display:flex; gap:14px; position:relative; padding-bottom:20px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-rail{width:14px; display:flex; flex-direction:column; align-items:center; flex-shrink:0; position:relative;}
+.tl-dot{width:14px; height:14px; border-radius:50%; background:var(--surface-2); border:2px solid var(--border); z-index:1; margin-top:3px; transition:.2s;}
+.tl-item.done .tl-dot{background:var(--green); border-color:var(--green);}
+.tl-line{position:absolute; top:16px; bottom:-4px; width:2px; background:var(--border);}
+.tl-item:last-child .tl-line{display:none;}
+.tl-body{flex:1; min-width:0; background:var(--surface-2); border-radius:14px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; gap:10px; transition:.2s;}
+.tl-item.done .tl-body{opacity:.6;}
+.tl-time{font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--brand); min-width:48px;}
+.tl-name{font-weight:600; font-size:14.5px;}
+.tl-item.done .tl-name{text-decoration:line-through; color:var(--text-dim);}
+.tl-meta{font-size:12px; color:var(--text-dim); margin-top:2px;}
+.tl-check{width:26px; height:26px; border-radius:8px; border:2px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; font-size:14px; color:transparent; transition:.15s;}
+.tl-check:hover{border-color:var(--brand);}
+.tl-item.done .tl-check{background:var(--green); border-color:var(--green); color:#fff;}
+.tl-actions{display:flex; gap:4px; flex-shrink:0;}
+.iconbtn{width:26px; height:26px; border-radius:8px; border:none; background:transparent; color:var(--text-faint); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px;}
+.iconbtn:hover{background:var(--surface); color:var(--text);}
+
+@keyframes pop{0%{transform:scale(1);} 40%{transform:scale(1.25);} 100%{transform:scale(1);}}
+.pop{animation:pop .35s ease;}
+
+/* ---------- Empty state ---------- */
+.empty{text-align:center; padding:44px 20px; color:var(--text-dim);}
+.empty .em-ic{font-size:34px; margin-bottom:10px;}
+.empty .em-title{font-weight:700; color:var(--text); font-size:15px; margin-bottom:4px;}
+.empty .em-sub{font-size:13px; margin-bottom:16px;}
+
+/* ---------- Calendar ---------- */
+.cal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+.cal-nav{display:flex; align-items:center; gap:8px;}
+.cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:6px;}
+.cal-dow{text-align:center; font-size:11px; font-weight:700; color:var(--text-faint); padding-bottom:6px;}
+.cal-cell{aspect-ratio:1/1; border-radius:12px; border:1.5px solid var(--border); background:var(--surface-2); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; position:relative; transition:.15s; min-height:44px;}
+.cal-cell:hover{border-color:var(--brand);}
+.cal-cell.empty-cell{background:transparent; border:none; cursor:default;}
+.cal-cell .cd-num{font-weight:700; font-size:13px;}
+.cal-cell.st-green{background:var(--green-bg); border-color:var(--green);}
+.cal-cell.st-green .cd-num{color:var(--green);}
+.cal-cell.st-red{background:var(--red-bg); border-color:var(--red);}
+.cal-cell.st-red .cd-num{color:var(--red);}
+.cal-cell.today{box-shadow:0 0 0 2px var(--brand) inset;}
+.cd-dot{width:5px; height:5px; border-radius:50%; background:var(--brand); position:absolute; bottom:6px;}
+.cal-legend{display:flex; gap:14px; margin-top:14px; flex-wrap:wrap; font-size:12px; color:var(--text-dim);}
+.cal-legend span{display:inline-flex; align-items:center; gap:6px;}
+.dotleg{width:9px; height:9px; border-radius:50%; display:inline-block;}
+
+/* ---------- Modal ---------- */
+.overlay{position:fixed; inset:0; background:rgba(10,11,20,.5); backdrop-filter:blur(2px); display:none; align-items:flex-end; justify-content:center; z-index:100; opacity:0; transition:opacity .2s;}
+.overlay.show{display:flex; opacity:1;}
+@media(min-width:720px){.overlay{align-items:center;}}
+.modal{background:var(--surface); width:100%; max-width:480px; max-height:88vh; overflow-y:auto; border-radius:20px 20px 0 0; padding:20px 20px 26px; transform:translateY(30px); transition:transform .25s cubic-bezier(.4,0,.2,1); box-shadow:var(--shadow-lg);}
+@media(min-width:720px){.modal{border-radius:20px; margin-bottom:0;}}
+.overlay.show .modal{transform:translateY(0);}
+.modal-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;}
+.modal-title{font-size:17px; font-weight:700; margin:0;}
+.modal-close{width:30px; height:30px; border-radius:9px; border:none; background:var(--surface-2); font-size:16px; cursor:pointer; color:var(--text-dim);}
+.field{margin-bottom:13px;}
+.field label{display:block; font-size:12.5px; font-weight:700; color:var(--text-dim); margin-bottom:6px;}
+.field input[type=text], .field input[type=date], .field input[type=time], .field input[type=number], .field input[type=url], .field select, .field textarea{
+  width:100%; padding:10px 12px; border-radius:10px; border:1.5px solid var(--border); background:var(--bg); color:var(--text); font-size:14px; font-family:inherit;
 }
-.day-chip .dname{font-size:11px; color:var(--text-faint); font-weight:600; text-transform:uppercase;}
-.day-chip .dfocus{font-size:12.5px; font-weight:600; margin-top:5px; color:var(--text);}
-.day-chip.today{background:linear-gradient(135deg, var(--primary), var(--primary-dark)); border-color:transparent;}
-.day-chip.today .dname, .day-chip.today .dfocus{color:#fff;}
-.day-chip .dstatus{width:7px; height:7px; border-radius:50%; margin:7px auto 0 auto;}
+.field textarea{min-height:64px; resize:vertical;}
+.field input:focus, .field select:focus, .field textarea:focus{outline:none; border-color:var(--brand);}
+.field-row{display:flex; gap:10px;}
+.field-row .field{flex:1;}
+.chk-row{display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600; padding:4px 0;}
+.modal-actions{display:flex; gap:10px; margin-top:18px;}
+.modal-actions .btn{flex:1; justify-content:center;}
+.quickpick{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.qp-item{display:flex; flex-direction:column; align-items:center; gap:8px; padding:18px 8px; border-radius:14px; border:1.5px solid var(--border); background:var(--surface-2); cursor:pointer; font-weight:600; font-size:13px;}
+.qp-item:hover{border-color:var(--brand); color:var(--brand);}
+.qp-item .qp-ic{font-size:22px;}
 
-.wo-summary{
-  display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:12px;
-}
-.wo-progress-bar{flex:1; min-width:160px; height:9px; border-radius:99px; background:var(--bg-alt); overflow:hidden;}
-.wo-progress-bar > div{height:100%; background:linear-gradient(90deg, var(--primary), var(--accent)); border-radius:99px; transition:width .4s ease;}
+/* toast */
+.toast-wrap{position:fixed; top:16px; right:16px; z-index:200; display:flex; flex-direction:column; gap:8px;}
+.toast{background:var(--text); color:var(--bg); padding:11px 16px; border-radius:11px; font-size:13.5px; font-weight:600; box-shadow:var(--shadow-lg); animation:slidein .25s ease;}
+[data-theme="dark"] .toast{background:var(--surface); color:var(--text); border:1px solid var(--border);}
+@keyframes slidein{from{transform:translateX(30px); opacity:0;} to{transform:translateX(0); opacity:1;}}
 
-.exercise-list{display:flex; flex-direction:column; gap:14px;}
-.ex-card{
-  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden;
-  box-shadow:var(--shadow-sm);
-}
-.ex-card .ex-body{padding:16px 18px;}
-.ex-card .ex-top{display:flex; align-items:center; justify-content:space-between; gap:10px;}
-.ex-card .ex-name{font-weight:600; font-size:15px;}
-.ex-card .ex-meta{font-size:12px; color:var(--text-muted); margin-top:3px; font-family:var(--font-mono);}
-.ex-done-btn{
-  padding:8px 14px; border-radius:11px; font-size:12.5px; font-weight:600; white-space:nowrap;
-  background:var(--bg-alt); color:var(--text-muted); border:1px solid var(--border);
-  transition:all .18s ease;
-}
-.ex-done-btn.done{background:var(--green); color:#fff; border-color:transparent;}
-.ex-video-toggle{margin-top:10px; font-size:12px; color:var(--primary-dark); font-weight:600; display:inline-flex; align-items:center; gap:4px;}
-.ex-video-wrap{display:none; margin-top:12px; border-radius:14px; overflow:hidden; background:#000;}
-.ex-video-wrap.show{display:block;}
-.ex-video-wrap blockquote.tiktok-embed{margin:0 auto !important; max-width:100% !important; min-width:auto !important;}
-.rest-day{
-  text-align:center; padding:60px 20px; color:var(--text-muted);
-}
-.rest-day .em{font-size:44px; margin-bottom:14px;}
+/* list rows generic */
+.row-card{display:flex; gap:12px; align-items:flex-start; padding:14px 16px; border-radius:14px; border:1px solid var(--border); background:var(--surface); margin-bottom:10px; transition:.15s;}
+.row-card:hover{box-shadow:var(--shadow);}
+.row-main{flex:1; min-width:0;}
+.row-top{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px;}
+.row-title{font-weight:700; font-size:14.5px;}
+.row-title.strike{text-decoration:line-through; color:var(--text-dim);}
+.row-desc{font-size:12.5px; color:var(--text-dim); line-height:1.5;}
+.row-meta{display:flex; gap:10px; margin-top:6px; flex-wrap:wrap; font-size:12px; color:var(--text-faint); font-weight:600;}
+.row-actions{display:flex; gap:4px; flex-shrink:0;}
 
-/* ===================== WATER ===================== */
-.water-hero{
-  background:linear-gradient(160deg, #EAF6F8, #E4F4F2);
-  border-radius:var(--radius-lg); padding:28px; text-align:center; margin-bottom:24px; border:1px solid var(--border);
-}
-.water-count{font-family:var(--font-mono); font-size:40px; font-weight:700; color:var(--primary-dark);}
-.water-count span{font-size:18px; color:var(--text-muted); font-weight:500;}
-.water-bar{height:10px; background:#D9EFEF; border-radius:99px; margin:16px auto 0 auto; max-width:340px; overflow:hidden;}
-.water-bar > div{height:100%; background:linear-gradient(90deg,#57BDB4,#3DA5A0); border-radius:99px; transition:width .35s ease;}
+.section-title{font-size:15px; font-weight:700; margin:0 0 12px; display:flex; align-items:center; gap:8px;}
+.subtle-link{color:var(--brand); font-weight:700; font-size:12.5px; cursor:pointer; background:none; border:none; padding:0;}
 
-.glass-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; max-width:420px; margin:0 auto;}
-@media(max-width:420px){.glass-grid{grid-template-columns:repeat(4,1fr); gap:10px;}}
-.glass{
-  display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 4px;
-  border-radius:16px; transition:transform .15s ease;
-}
-.glass:active{transform:scale(0.92);}
-.glass .cup{
-  width:44px; height:52px; border:2.5px solid #B9DEDC; border-top:none;
-  border-radius:0 0 10px 10px; position:relative; background:#F2FBFB; overflow:hidden;
-}
-.glass .cup .fill{position:absolute; bottom:0; left:0; right:0; height:0%; background:linear-gradient(180deg,#7FD1CA,#3DA5A0); transition:height .3s ease;}
-.glass.filled .cup .fill{height:100%;}
-.glass .time{font-size:10.5px; color:var(--text-faint); font-family:var(--font-mono);}
+.controls-row{display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;}
+.search-box{flex:1; min-width:180px; display:flex; align-items:center; gap:8px; background:var(--surface); border:1.5px solid var(--border); border-radius:11px; padding:8px 12px;}
+.search-box input{border:none; background:none; outline:none; color:var(--text); font-size:13.5px; width:100%;}
+.select-filter{padding:8px 12px; border-radius:11px; border:1.5px solid var(--border); background:var(--surface); font-size:13px; color:var(--text-dim); font-weight:600;}
 
-.water-actions{display:flex; justify-content:center; margin-top:22px;}
-.link-btn{font-size:12.5px; color:var(--text-muted); font-weight:600; padding:8px 14px; border-radius:10px;}
-.link-btn:hover{background:var(--bg-alt); color:var(--red);}
+.tabs{display:flex; gap:6px; margin-bottom:16px; background:var(--surface-2); padding:4px; border-radius:12px; width:fit-content; overflow-x:auto; max-width:100%;}
+.tab{padding:8px 14px; border-radius:9px; border:none; background:none; font-weight:700; font-size:12.5px; color:var(--text-dim); cursor:pointer; white-space:nowrap;}
+.tab.active{background:var(--surface); color:var(--brand); box-shadow:var(--shadow);}
 
-/* ===================== FINANCE ===================== */
-.fin-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:22px; align-items:start;}
-@media(max-width:900px){.fin-grid{grid-template-columns:1fr;}}
+.workout-card{border-radius:16px; border:1px solid var(--border); background:var(--surface); padding:16px; margin-bottom:12px; display:flex; align-items:center; gap:14px;}
+.workout-card .wc-ic{width:46px; height:46px; border-radius:12px; background:var(--orange-bg); color:var(--orange); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;}
+.streak-badge{display:inline-flex; align-items:center; gap:5px; background:var(--orange-bg); color:var(--orange); padding:5px 12px; border-radius:999px; font-weight:700; font-size:13px;}
 
-.fin-form{display:flex; flex-direction:column; gap:14px;}
-.field label{font-size:12px; color:var(--text-muted); font-weight:600; display:block; margin-bottom:6px;}
-.field input[type=number], .field input[type=text]{
-  width:100%; border:1px solid var(--border); border-radius:12px; padding:11px 13px; font-size:14.5px;
-  background:var(--surface-2);
-}
-.field input[type=number]{font-family:var(--font-mono); font-weight:600;}
-.cat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
-.cat-btn{
-  padding:10px 4px; border-radius:12px; background:var(--surface-2); border:1px solid var(--border);
-  font-size:12px; font-weight:600; color:var(--text-muted); text-align:center; transition:all .15s ease;
-}
-.cat-btn .em{display:block; font-size:17px; margin-bottom:4px;}
-.cat-btn.active{background:var(--primary-tint); color:var(--primary-dark); border-color:var(--primary);}
+/* Bottom nav (mobile) */
+.bottomnav{display:none;}
+.fab{display:none;}
 
-.fin-list{display:flex; flex-direction:column; gap:10px; margin-top:16px; max-height:280px; overflow-y:auto;}
-.fin-item{
-  display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:14px; background:var(--surface-2); border:1px solid var(--border);
-}
-.fin-item .fi-icon{width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; background:var(--accent-tint); flex-shrink:0;}
-.fin-item .fi-mid{flex:1; min-width:0;}
-.fin-item .fi-cat{font-size:13.5px; font-weight:600;}
-.fin-item .fi-note{font-size:11.5px; color:var(--text-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.fin-item .fi-amount{font-family:var(--font-mono); font-weight:700; font-size:13.5px; white-space:nowrap;}
-.fin-item .fi-del{color:var(--text-faint); font-size:15px; padding:4px 6px;}
-.fin-item .fi-del:hover{color:var(--red);}
-.fin-empty{text-align:center; color:var(--text-faint); font-size:13px; padding:30px 0;}
-
-.fin-total-bar{
-  display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-radius:14px;
-  background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:#fff; margin-top:16px;
-}
-.fin-total-bar .lbl{font-size:12.5px; opacity:.9;}
-.fin-total-bar .amt{font-family:var(--font-mono); font-size:19px; font-weight:700;}
-
-.month-stats{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:18px;}
-.mini-stat{background:var(--surface-2); border:1px solid var(--border); border-radius:14px; padding:14px; text-align:center;}
-.mini-stat .v{font-family:var(--font-mono); font-weight:700; font-size:15px;}
-.mini-stat .l{font-size:11px; color:var(--text-muted); margin-top:4px;}
-
-.chart-wrap{margin-top:6px;}
-.bar-row{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
-.bar-row .bl{width:70px; font-size:11.5px; color:var(--text-muted); font-weight:600; flex-shrink:0;}
-.bar-row .btrack{flex:1; height:12px; background:var(--bg-alt); border-radius:99px; overflow:hidden;}
-.bar-row .btrack > div{height:100%; border-radius:99px; background:linear-gradient(90deg,var(--accent),var(--primary));}
-.bar-row .bv{width:74px; font-family:var(--font-mono); font-size:11px; text-align:right; color:var(--text-muted); flex-shrink:0;}
-
-/* ===================== STATISTIK ===================== */
-.stat-hero{
-  display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:22px;
-}
-@media(max-width:700px){.stat-hero{grid-template-columns:1fr;}}
-.stat-box{border-radius:var(--radius-md); padding:20px; text-align:center; border:1px solid var(--border);}
-.stat-box .num{font-family:var(--font-mono); font-size:30px; font-weight:700;}
-.stat-box .lbl{font-size:12.5px; margin-top:4px; font-weight:600;}
-.stat-box.green{background:var(--green-tint);} .stat-box.green .num,.stat-box.green .lbl{color:var(--green);}
-.stat-box.yellow{background:var(--yellow-tint);} .stat-box.yellow .num,.stat-box.yellow .lbl{color:var(--yellow);}
-.stat-box.red{background:var(--red-tint);} .stat-box.red .num,.stat-box.red .lbl{color:var(--red);}
-
-.progress-block{margin-bottom:22px;}
-.progress-block .pb-top{display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px; font-weight:600;}
-.progress-block .pb-bar{height:14px; border-radius:99px; background:var(--bg-alt); overflow:hidden; display:flex;}
-.progress-block .pb-bar div{height:100%;}
-
-.insight-card{
-  display:flex; gap:14px; align-items:flex-start; padding:18px; border-radius:var(--radius-md);
-  background:var(--surface); border:1px solid var(--border);
-}
-.insight-card .em{font-size:28px;}
-.insight-card h4{font-size:15px; margin-bottom:4px;}
-.insight-card p{font-size:13px; color:var(--text-muted); line-height:1.55;}
-
-.week-mini{display:flex; gap:8px; margin-top:20px;}
-.week-mini .wm-day{flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;}
-.week-mini .wm-dot{width:28px; height:28px; border-radius:9px;}
-.week-mini .wm-lbl{font-size:10.5px; color:var(--text-faint); font-weight:600;}
-
-/* ===================== MOBILE ===================== */
-@media (max-width:880px){
+@media(max-width:900px){
   .sidebar{display:none;}
-  .main{padding:20px 16px calc(var(--bottom-h) + 28px) 16px;}
-  .bottom-nav{
-    display:flex; position:fixed; bottom:0; left:0; right:0; height:var(--bottom-h);
-    background:var(--surface); border-top:1px solid var(--border); z-index:60;
-    padding:8px 6px calc(env(safe-area-inset-bottom,0px) + 6px) 6px;
-    box-shadow:0 -6px 20px rgba(48,40,90,0.06);
+  .main{padding:14px 14px 96px; max-width:100%;}
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:40;
+    background:var(--bg); padding:12px 2px 12px; margin:-14px -14px 8px; padding-left:16px; padding-right:16px;
   }
-  .bn-item{
-    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
-    color:var(--text-faint); font-size:10px; font-weight:600; border-radius:12px;
+  .bottomnav{
+    display:flex; position:fixed; bottom:0; left:0; right:0; background:var(--surface); border-top:1px solid var(--border);
+    padding:8px 6px calc(8px + env(safe-area-inset-bottom)); z-index:50; justify-content:flex-start; overflow-x:scroll; scrollbar-width:none; -webkit-overflow-scrolling:touch; touch-action:pan-x; overscroll-behavior-x:contain;
   }
+  .bottomnav::-webkit-scrollbar{display:none;}
+  .bn-track{display:flex; width:740px; min-width:740px;}
+  .bn-item{display:flex; flex:0 0 74px; flex-direction:column; align-items:center; justify-content:center; gap:2px; background:none; border:none; color:var(--text-faint); font-size:9.5px; font-weight:700; padding:5px 2px; cursor:pointer; scroll-snap-align:center;}
   .bn-item .ic{font-size:19px;}
-  .bn-item.active{color:var(--primary-dark);}
-  .bn-item.active .ic{transform:translateY(-1px);}
-  .summary-grid{grid-template-columns:repeat(2,1fr);}
-  .dash-hero{padding:24px 20px;}
-  .fin-grid{grid-template-columns:1fr;}
+  .bn-item.active{color:var(--brand);}
+  .fab{
+    display:flex; position:fixed; right:16px; bottom:74px; width:56px; height:56px; border-radius:50%; background:var(--brand); color:#fff;
+    align-items:center; justify-content:center; font-size:26px; border:none; box-shadow:var(--shadow-lg); z-index:55; cursor:pointer;
+  }
+  .grid-4{grid-template-columns:1fr 1fr;}
+  .field-row{flex-direction:column; gap:0;}
 }
+@media(min-width:901px){
+  .fab{display:flex; position:fixed; right:32px; bottom:32px; width:56px; height:56px; border-radius:50%; background:var(--brand); color:#fff; align-items:center; justify-content:center; font-size:26px; border:none; box-shadow:var(--shadow-lg); z-index:55; cursor:pointer;}
+}
+.fab:hover{filter:brightness(1.08); transform:scale(1.04);}
+
+.deadline-flag{font-weight:700; font-size:12px; padding:3px 9px; border-radius:8px; display:inline-flex; align-items:center; gap:4px;}
+
+.settings-block{margin-bottom:24px;}
+.switch{position:relative; width:44px; height:25px; flex-shrink:0;}
+.switch input{opacity:0; width:0; height:0;}
+.slider{position:absolute; cursor:pointer; inset:0; background:var(--surface-2); border:1.5px solid var(--border); transition:.2s; border-radius:999px;}
+.slider:before{content:""; position:absolute; height:18px; width:18px; left:3px; top:2px; background:var(--text-faint); border-radius:50%; transition:.2s;}
+.switch input:checked + .slider{background:var(--brand); border-color:var(--brand);}
+.switch input:checked + .slider:before{transform:translateX(18px); background:#fff;}
+.settings-row{display:flex; align-items:center; justify-content:between; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--border); gap:14px;}
+.settings-row:last-child{border-bottom:none;}
+.settings-label{font-weight:600; font-size:14px;}
+.settings-desc{font-size:12px; color:var(--text-dim); margin-top:2px;}
+
+.priority-Urgent{color:var(--red);} .priority-Tinggi{color:var(--orange);} .priority-Sedang{color:var(--yellow);} .priority-Rendah{color:var(--text-dim);}
+
+@media(max-width:640px){ .grid-2, .grid-3 {grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
+<div class="toast-wrap" id="toastWrap"></div>
 
 <div class="app">
-  <!-- ============ SIDEBAR ============ -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="mark">🌙</div>
-      <div class="name">Lumina<span>.</span></div>
+      <div class="brand-mark">D</div>
+      <div>
+        <div class="brand-name">Daily Routine</div>
+        <div class="brand-sub">Personal Planner</div>
+      </div>
     </div>
-    <nav id="sideNav">
-      <div class="nav-item active" data-page="dashboard"><span class="ic">🏠</span>Dashboard</div>
-      <div class="nav-item" data-page="habit"><span class="ic">✅</span>Habit</div>
-      <div class="nav-item" data-page="workout"><span class="ic">💪</span>Workout</div>
-      <div class="nav-item" data-page="water"><span class="ic">💧</span>Water</div>
-      <div class="nav-item" data-page="finance"><span class="ic">💰</span>Finance</div>
-      <div class="nav-item" data-page="statistik"><span class="ic">📈</span>Statistik</div>
-    </nav>
-    <div class="sidebar-foot">Data tersimpan otomatis di perangkat ini.</div>
+    <nav id="sideNav"></nav>
+    <div class="sidebar-foot">
+      <button class="nav-item" id="themeToggleBtnDesktop"><span class="ic">🌙</span><span>Dark Mode</span></button>
+    </div>
   </aside>
 
-  <!-- ============ MAIN ============ -->
+  <!-- MAIN -->
   <main class="main">
+    <div class="topbar">
+      <div class="brand"><div class="brand-mark" style="width:30px;height:30px;font-size:14px;">D</div><div class="brand-name" style="font-size:15px;">Daily Routine</div></div>
+      <button class="btn btn-sm" id="themeToggleBtnMobile">🌙</button>
+    </div>
 
-    <!-- ---------- DASHBOARD ---------- -->
-    <section class="page active" id="page-dashboard">
-      <div class="dash-hero">
-        <div>
-          <div class="greet-day" id="dhDay">SELASA</div>
-          <div class="greet-date" id="dhDate">11 Agustus 2026</div>
-          <div class="greet-line" id="dhLine">Menyiapkan hari kamu…</div>
-        </div>
-        <div class="ring-wrap">
-          <div class="ring">
-            <svg width="104" height="104" viewBox="0 0 104 104">
-              <circle cx="52" cy="52" r="44" stroke="rgba(255,255,255,0.25)" stroke-width="10" fill="none"/>
-              <circle id="dhRingFg" cx="52" cy="52" r="44" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="276.5"/>
-            </svg>
-            <div class="pct"><span id="dhRingPct">0%</span><small>hari ini</small></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="summary-grid" id="dashSummary"></div>
-    </section>
-
-    <!-- ---------- HABIT ---------- -->
-    <section class="page" id="page-habit">
+    <!-- DASHBOARD -->
+    <section class="view" id="view-dashboard">
       <div class="page-head">
         <div>
-          <div class="eyebrow">Habit Tracker</div>
-          <h1>Kebiasaan Harian</h1>
-          <div class="sub">Klik salah satu tanggal untuk mengisi checklist & catatan.</div>
+          <div class="page-sub" id="dashGreeting">Selamat datang</div>
+          <h1 class="page-title" id="dashDate">-</h1>
         </div>
       </div>
+
+      <div class="grid grid-2" style="margin-bottom:16px;">
+        <div class="card">
+          <div class="hero-ring-wrap">
+            <svg class="ring" viewBox="0 0 74 74">
+              <circle class="track" cx="37" cy="37" r="30"></circle>
+              <circle class="fill" id="ringFill" cx="37" cy="37" r="30" stroke-dasharray="188.5" stroke-dashoffset="188.5"></circle>
+            </svg>
+            <div>
+              <div class="section-title" style="margin:0;">Today's Focus</div>
+              <div class="page-sub" style="margin-top:2px;">Progress hari ini <b id="todayPct" style="color:var(--brand);">0%</b></div>
+              <div id="focusList" style="margin-top:8px; font-size:13px; color:var(--text-dim); line-height:1.7;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-title">📌 Reminder Penting</div>
+          <div id="reminderList"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-4" style="margin-bottom:16px;">
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--blue-bg); color:var(--blue);">✅</div><div class="stat-num" id="statRoutine">0/0</div><div class="stat-label">Routine hari ini</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--red-bg); color:var(--red);">📝</div><div class="stat-num" id="statPR">0</div><div class="stat-label">PR belum selesai</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--orange-bg); color:var(--orange);">🔥</div><div class="stat-num" id="statStreak">0</div><div class="stat-label">Workout streak</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--purple-bg); color:var(--purple);">📚</div><div class="stat-num" id="statStudy">0j</div><div class="stat-label">Belajar minggu ini</div></div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="section-title">🏋️ Workout Hari Ini <button class="subtle-link" style="margin-left:auto;" onclick="goto('workout')">Lihat semua →</button></div>
+          <div id="dashWorkout"></div>
+        </div>
+        <div class="card">
+          <div class="section-title">📚 Belajar Hari Ini <button class="subtle-link" style="margin-left:auto;" onclick="goto('study')">Lihat semua →</button></div>
+          <div id="dashStudy"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:16px;">
+        <div class="card">
+          <div class="section-title">📝 PR Mendesak <button class="subtle-link" style="margin-left:auto;" onclick="goto('tasks')">Lihat semua →</button></div>
+          <div id="dashPR"></div>
+        </div>
+        <div class="card">
+          <div class="section-title">🏆 Lomba Terdekat <button class="subtle-link" style="margin-left:auto;" onclick="goto('competitions')">Lihat semua →</button></div>
+          <div id="dashComp"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDAR -->
+    <section class="view" id="view-calendar">
+      <div class="page-head">
+        <div><h1 class="page-title">Calendar</h1><div class="page-sub">Tandai harimu secara manual — kamu yang menilai, bukan sistem.</div></div>
+      </div>
       <div class="card">
-        <div class="cal-toolbar">
-          <button class="icon-btn" id="calPrev">‹</button>
-          <div class="month-label" id="calMonthLabel">Agustus 2026</div>
-          <button class="icon-btn" id="calNext">›</button>
-          <div class="legend">
-            <span><i class="dot green"></i>Selesai</span>
-            <span><i class="dot yellow"></i>Sebagian</span>
-            <span><i class="dot red"></i>Kosong</span>
+        <div class="cal-head">
+          <div class="disp" style="font-weight:700; font-size:17px;" id="calMonthLabel">-</div>
+          <div class="cal-nav">
+            <button class="btn btn-sm" onclick="calShift(-1)">‹</button>
+            <button class="btn btn-sm" onclick="calToday()">Hari ini</button>
+            <button class="btn btn-sm" onclick="calShift(1)">›</button>
           </div>
         </div>
         <div class="cal-grid" id="calDow"></div>
-        <div class="cal-grid" id="calGrid" style="margin-top:8px;"></div>
-      </div>
-    </section>
-
-    <!-- ---------- WORKOUT ---------- -->
-    <section class="page" id="page-workout">
-      <div class="page-head">
-        <div>
-          <div class="eyebrow">Workout Plan</div>
-          <h1 id="woTitle">Jadwal Latihan</h1>
-          <div class="sub" id="woSub">Pilih hari untuk lihat detail latihan.</div>
-        </div>
-      </div>
-      <div class="week-strip" id="weekStrip"></div>
-      <div class="card">
-        <div class="wo-summary">
-          <div style="font-size:13px; font-weight:600;" id="woProgLabel">0 / 0 selesai</div>
-          <div class="wo-progress-bar"><div id="woProgFill" style="width:0%"></div></div>
-        </div>
-        <div class="exercise-list" id="exerciseList"></div>
-      </div>
-    </section>
-
-    <!-- ---------- WATER ---------- -->
-    <section class="page" id="page-water">
-      <div class="page-head">
-        <div>
-          <div class="eyebrow">Water Tracker</div>
-          <h1>Minum Air</h1>
-          <div class="sub">Ketuk gelas sesuai jadwal minummu hari ini.</div>
-        </div>
-      </div>
-      <div class="water-hero">
-        <div class="water-count"><span id="waterCount">0</span><span> / 8 gelas</span></div>
-        <div class="water-bar"><div id="waterBarFill" style="width:0%"></div></div>
-      </div>
-      <div class="card">
-        <div class="glass-grid" id="glassGrid"></div>
-        <div class="water-actions">
-          <button class="link-btn" id="waterReset">↺ Reset hari ini</button>
+        <div class="cal-grid" id="calGrid" style="margin-top:6px;"></div>
+        <div class="cal-legend">
+          <span><i class="dotleg" style="background:var(--green);"></i> Hari baik</span>
+          <span><i class="dotleg" style="background:var(--red);"></i> Hari kurang baik</span>
+          <span><i class="dotleg" style="background:var(--text-faint);"></i> Belum diberi status</span>
+          <span><i class="dotleg" style="background:var(--brand);"></i> Ada catatan</span>
         </div>
       </div>
     </section>
 
-    <!-- ---------- FINANCE ---------- -->
-    <section class="page" id="page-finance">
+    <!-- ROUTINE -->
+    <section class="view" id="view-routine">
       <div class="page-head">
-        <div>
-          <div class="eyebrow">Finance Tracker</div>
-          <h1>Keuangan</h1>
-          <div class="sub" id="finDateLabel">Catatan pengeluaran hari ini.</div>
-        </div>
+        <div><h1 class="page-title">Daily Routine</h1><div class="page-sub" id="routineDateLabel">-</div></div>
+        <button class="btn btn-primary" onclick="openRoutineModal()">+ Tambah Kegiatan</button>
       </div>
+      <div class="controls-row">
+        <div class="search-box">🔎<input type="text" id="routineSearch" placeholder="Cari kegiatan..." oninput="renderRoutine()"></div>
+        <select class="select-filter" id="routineCatFilter" onchange="renderRoutine()">
+          <option value="">Semua kategori</option>
+          <option>Sekolah</option><option>Belajar</option><option>Workout</option><option>Ibadah</option><option>Pribadi</option><option>Lainnya</option>
+        </select>
+      </div>
+      <div class="card"><div class="timeline" id="routineTimeline"></div></div>
+    </section>
 
-      <div class="fin-grid">
+    <!-- WATER -->
+    <section class="view" id="view-water">
+      <div class="page-head">
+        <div><h1 class="page-title">Minum Air</h1><div class="page-sub">Pantau gelas air minum hari ini.</div></div>
+      </div>
+      <div class="grid grid-2">
         <div class="card">
-          <div class="fin-form">
-            <div class="field">
-              <label>Jumlah (Rp)</label>
-              <input type="number" id="finAmount" placeholder="0" min="0">
+          <div class="hero-ring-wrap">
+            <svg class="ring" viewBox="0 0 74 74">
+              <circle class="track" cx="37" cy="37" r="30"></circle>
+              <circle class="fill" id="waterRingFill" cx="37" cy="37" r="30" stroke-dasharray="188.5" stroke-dashoffset="188.5"></circle>
+            </svg>
+            <div>
+              <div class="section-title" style="margin:0;">Air hari ini</div>
+              <div class="page-sub" style="margin-top:2px;"><b id="waterCount" style="color:var(--brand);">0</b> dari <b id="waterTargetLabel">8</b> gelas</div>
+              <div class="progress-track" style="margin-top:10px; width:180px;"><div class="progress-fill" id="waterProgressBar" style="width:0%;"></div></div>
             </div>
-            <div class="field">
-              <label>Kategori</label>
-              <div class="cat-grid" id="finCatGrid">
-                <button class="cat-btn active" data-cat="Makan"><span class="em">🍚</span>Makan</button>
-                <button class="cat-btn" data-cat="Transport"><span class="em">🚌</span>Transport</button>
-                <button class="cat-btn" data-cat="Jajan"><span class="em">🍿</span>Jajan</button>
-                <button class="cat-btn" data-cat="Lainnya"><span class="em">🧾</span>Lainnya</button>
-              </div>
-            </div>
-            <div class="field">
-              <label>Catatan (opsional)</label>
-              <input type="text" id="finNote" placeholder="mis. makan siang kantor">
-            </div>
-            <button class="btn btn-primary" id="finAddBtn" style="margin-top:2px;">+ Tambah transaksi</button>
-          </div>
-
-          <div class="fin-list" id="finList"></div>
-          <div class="fin-total-bar">
-            <div class="lbl">Total hari ini</div>
-            <div class="amt" id="finTodayTotal">Rp 0</div>
           </div>
         </div>
-
         <div class="card">
-          <div class="section-title" style="margin-top:0;">Ringkasan Bulanan</div>
-          <div class="month-stats" id="finMonthStats"></div>
-          <div class="section-title">Pengeluaran per Kategori</div>
-          <div class="chart-wrap" id="finChart"></div>
+          <div class="section-title">Tambah air</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+            <button class="btn btn-primary" onclick="addWater(1)">+ 1 gelas</button>
+            <button class="btn" onclick="addWater(2)">+ 2 gelas</button>
+            <button class="btn btn-sm" onclick="addWater(-1)">- 1 gelas</button>
+          </div>
+          <div class="field" style="margin-bottom:0;"><label>Target harian (gelas)</label><input type="number" id="waterTarget" min="1" max="30" step="1" onchange="saveWaterTarget()"></div>
+          <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="resetWater()">Reset hari ini</button>
         </div>
       </div>
     </section>
 
-    <!-- ---------- STATISTIK ---------- -->
-    <section class="page" id="page-statistik">
+    <!-- TASKS / PR -->
+    <section class="view" id="view-tasks">
       <div class="page-head">
-        <div>
-          <div class="eyebrow">Statistik</div>
-          <h1>Ringkasan Minggu Ini</h1>
-          <div class="sub" id="statRange">7 hari terakhir</div>
-        </div>
+        <div><h1 class="page-title">PR & Tasks</h1><div class="page-sub">Kelola tugas sekolah dan tenggat waktunya.</div></div>
+        <button class="btn btn-primary" onclick="openTaskModal()">+ Tambah PR</button>
       </div>
-
-      <div class="stat-hero">
-        <div class="stat-box green"><div class="num" id="statGreen">0</div><div class="lbl">Hari Hijau</div></div>
-        <div class="stat-box yellow"><div class="num" id="statYellow">0</div><div class="lbl">Hari Kuning</div></div>
-        <div class="stat-box red"><div class="num" id="statRed">0</div><div class="lbl">Hari Merah</div></div>
+      <div class="controls-row">
+        <div class="search-box">🔎<input type="text" id="taskSearch" placeholder="Cari tugas / mapel..." oninput="renderTasks()"></div>
+        <select class="select-filter" id="taskStatusFilter" onchange="renderTasks()">
+          <option value="">Semua status</option><option>Belum dikerjakan</option><option>Sedang dikerjakan</option><option>Selesai</option>
+        </select>
+        <select class="select-filter" id="taskPriorityFilter" onchange="renderTasks()">
+          <option value="">Semua prioritas</option><option>Urgent</option><option>Tinggi</option><option>Sedang</option><option>Rendah</option>
+        </select>
       </div>
+      <div id="tasksList"></div>
+    </section>
 
+    <!-- STUDY PLANNER -->
+    <section class="view" id="view-study">
+      <div class="page-head">
+        <div><h1 class="page-title">Study Planner — UTBK & TKA</h1><div class="page-sub">Rencanakan sesi belajarmu, satu materi setiap kali.</div></div>
+        <button class="btn btn-primary" onclick="openStudyModal()">+ Tambah Sesi</button>
+      </div>
+      <div class="grid grid-4" style="margin-bottom:16px;">
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--purple-bg); color:var(--purple);">⏱️</div><div class="stat-num" id="studyTotalHours">0j</div><div class="stat-label">Jam minggu ini</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--blue-bg); color:var(--blue);">📅</div><div class="stat-num" id="studySessions">0</div><div class="stat-label">Sesi minggu ini</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--green-bg); color:var(--green);">✅</div><div class="stat-num" id="studyDone">0</div><div class="stat-label">Materi selesai</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--orange-bg); color:var(--orange);">🔥</div><div class="stat-num" id="studyStreak">0</div><div class="stat-label">Study streak</div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="section-title">Progress belajar minggu ini</div>
+        <div class="progress-track"><div class="progress-fill" id="studyProgressBar" style="width:0%;"></div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="section-title">📚 Jadwal TKA & UTBK Hari Ini</div>
+        <div id="studyScheduleToday"></div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="section-title">🗓️ Jadwal Mingguan</div>
+        <div id="studyScheduleWeek"></div>
+      </div>
+      <div id="studyList"></div>
+    </section>
+
+    <!-- WORKOUT -->
+    <section class="view" id="view-workout">
+      <div class="page-head">
+        <div><h1 class="page-title">Workout</h1><div class="page-sub" id="workoutDayLabel">-</div></div>
+      </div>
+      <div class="grid grid-4" style="margin-bottom:16px;">
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--orange-bg); color:var(--orange);">🏋️</div><div class="stat-num" id="wStatToday">0/0</div><div class="stat-label">Hari ini</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--blue-bg); color:var(--blue);">📆</div><div class="stat-num" id="wStatWeek">0</div><div class="stat-label">Minggu ini</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--green-bg); color:var(--green);">✅</div><div class="stat-num" id="wStatDone">0</div><div class="stat-label">Selesai total</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--orange-bg); color:var(--orange);">🔥</div><div class="stat-num" id="wStatStreak">0</div><div class="stat-label">Streak</div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="section-title">🏋️ Today's Workout</div>
+        <div id="workoutToday"></div>
+      </div>
       <div class="card">
-        <div class="progress-block">
-          <div class="pb-top"><span>Persentase Sukses</span><span id="statPctLabel">0%</span></div>
-          <div class="pb-bar"><div id="statPctBar" style="width:0%; background:var(--green);"></div></div>
-        </div>
-        <div class="week-mini" id="weekMini"></div>
-      </div>
-
-      <div style="height:16px;"></div>
-      <div class="insight-card" id="insightCard">
-        <div class="em">🔥</div>
-        <div><h4>Memuat insight…</h4><p></p></div>
+        <div class="section-title">📆 Jadwal Minggu Ini</div>
+        <div id="workoutWeek"></div>
       </div>
     </section>
 
+    <!-- COMPETITIONS -->
+    <section class="view" id="view-competitions">
+      <div class="page-head">
+        <div><h1 class="page-title">Lomba</h1><div class="page-sub">Pantau semua kompetisi yang kamu ikuti.</div></div>
+        <button class="btn btn-primary" onclick="openCompModal()">+ Tambah Lomba</button>
+      </div>
+      <div class="controls-row">
+        <div class="search-box">🔎<input type="text" id="compSearch" placeholder="Cari lomba..." oninput="renderCompetitions()"></div>
+        <select class="select-filter" id="compStatusFilter" onchange="renderCompetitions()">
+          <option value="">Semua status</option><option>Belum daftar</option><option>Sudah daftar</option><option>Sedang dikerjakan</option><option>Sudah dikumpulkan</option><option>Menang</option><option>Tidak menang</option><option>Selesai</option>
+        </select>
+      </div>
+      <div id="compList"></div>
+    </section>
+
+    <!-- STATISTICS -->
+    <section class="view" id="view-stats">
+      <div class="page-head"><div><h1 class="page-title">Statistics</h1><div class="page-sub">Ringkasan produktivitasmu.</div></div></div>
+      <div class="grid grid-4" style="margin-bottom:16px;">
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--blue-bg); color:var(--blue);">📈</div><div class="stat-num" id="sProductivity">0%</div><div class="stat-label">Productivity</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--green-bg); color:var(--green);">✅</div><div class="stat-num" id="sRoutine">0%</div><div class="stat-label">Routine completion</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--purple-bg); color:var(--purple);">📚</div><div class="stat-num" id="sStudyHours">0j</div><div class="stat-label">Total jam belajar</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--orange-bg); color:var(--orange);">🔥</div><div class="stat-num" id="sWorkoutStreak">0</div><div class="stat-label">Workout streak</div></div>
+      </div>
+      <div class="grid grid-4" style="margin-bottom:16px;">
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--red-bg); color:var(--red);">📝</div><div class="stat-num" id="sPR">0%</div><div class="stat-label">PR completion</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--blue-bg); color:var(--blue);">🏆</div><div class="stat-num" id="sCompTotal">0</div><div class="stat-label">Jumlah lomba</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--green-bg); color:var(--green);">🏁</div><div class="stat-num" id="sCompDone">0</div><div class="stat-label">Lomba selesai</div></div>
+        <div class="card stat-card"><div class="stat-icon" style="background:var(--yellow-bg); color:var(--yellow);">🗓️</div><div class="stat-num" id="sWeekProgress">0%</div><div class="stat-label">Progress minggu ini</div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="section-title">Progress 7 hari terakhir (routine)</div>
+        <div id="barChart7" style="display:flex; align-items:flex-end; gap:8px; height:140px; padding-top:10px;"></div>
+      </div>
+      <div class="card">
+        <div class="section-title">Progress bulanan (kalender)</div>
+        <div class="grid grid-3">
+          <div><div class="stat-label">Hari hijau</div><div class="stat-num" id="mGreen" style="color:var(--green);">0</div></div>
+          <div><div class="stat-label">Hari merah</div><div class="stat-num" id="mRed" style="color:var(--red);">0</div></div>
+          <div><div class="stat-label">Belum diberi status</div><div class="stat-num" id="mGray" style="color:var(--text-dim);">0</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="view" id="view-settings">
+      <div class="page-head"><div><h1 class="page-title">Settings</h1><div class="page-sub">Atur preferensi & data aplikasi.</div></div></div>
+
+      <div class="card settings-block">
+        <div class="section-title">Profil</div>
+        <div class="field"><label>Nama Pengguna</label><input type="text" id="setName" placeholder="Nama kamu"></div>
+        <button class="btn btn-primary btn-sm" onclick="saveProfile()">Simpan</button>
+      </div>
+
+      <div class="card settings-block">
+        <div class="section-title">Tampilan</div>
+        <div class="settings-row">
+          <div><div class="settings-label">Dark Mode</div><div class="settings-desc">Ubah tema terang/gelap</div></div>
+          <label class="switch"><input type="checkbox" id="setDarkMode" onchange="toggleTheme()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="card settings-block">
+        <div class="section-title">Notifikasi & Reminder</div>
+        <div class="settings-row">
+          <div><div class="settings-label">Notifikasi</div><div class="settings-desc">Aktifkan pengingat kegiatan & deadline</div></div>
+          <label class="switch"><input type="checkbox" id="setNotifOn" onchange="toggleNotif()"><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Reminder harian jam</div><div class="settings-desc">Pengingat cek rutinitas harian</div></div>
+          <input type="time" id="setReminderTime" style="border:1.5px solid var(--border); border-radius:9px; padding:7px 10px; background:var(--bg); color:var(--text);" onchange="saveSettingsFields()">
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Reminder deadline H-1</div><div class="settings-desc">Ingatkan 1 hari sebelum deadline</div></div>
+          <label class="switch"><input type="checkbox" id="setH1" onchange="saveSettingsFields()"><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Reminder deadline H-3</div><div class="settings-desc">Ingatkan 3 hari sebelum deadline</div></div>
+          <label class="switch"><input type="checkbox" id="setH3" onchange="saveSettingsFields()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="card settings-block">
+        <div class="section-title">Data</div>
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+          <button class="btn" onclick="exportData()">⬇️ Export Data</button>
+          <button class="btn" onclick="document.getElementById('importFile').click()">⬆️ Import Data</button>
+          <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
+          <button class="btn" onclick="exportData(true)">💾 Backup</button>
+          <button class="btn btn-danger" onclick="confirmReset()">🗑️ Reset Aplikasi</button>
+        </div>
+      </div>
+    </section>
   </main>
 </div>
 
-<!-- ============ BOTTOM NAV (mobile) ============ -->
-<nav class="bottom-nav" id="bottomNav">
-  <div class="bn-item active" data-page="dashboard"><span class="ic">🏠</span>Home</div>
-  <div class="bn-item" data-page="habit"><span class="ic">✅</span>Habit</div>
-  <div class="bn-item" data-page="workout"><span class="ic">💪</span>Workout</div>
-  <div class="bn-item" data-page="water"><span class="ic">💧</span>Water</div>
-  <div class="bn-item" data-page="finance"><span class="ic">💰</span>Finance</div>
-  <div class="bn-item" data-page="statistik"><span class="ic">📈</span>Statistik</div>
-</nav>
+<button class="fab" onclick="openQuickAdd()">+</button>
+<nav class="bottomnav" id="bottomNav"></nav>
 
-<!-- ============ HABIT / SLEEP MODAL ============ -->
-<div class="modal-overlay" id="habitModalOverlay">
-  <div class="modal">
-    <div class="modal-head">
-      <h3 id="modalDateTitle">11 Agustus 2026</h3>
-      <button class="close-x" id="modalClose">✕</button>
-    </div>
-    <div class="modal-sub" id="modalDowLabel">Selasa</div>
-
-    <div class="section-title">Checklist Habit</div>
-    <div id="toggleList">
-      <div class="toggle-row" data-habit="belajar">
-        <div class="t-label"><span class="em">📚</span>Belajar</div>
-        <div class="switch" data-key="belajar"></div>
-      </div>
-      <div class="toggle-row" data-habit="olahraga">
-        <div class="t-label"><span class="em">🏋️</span>Olahraga</div>
-        <div class="switch" data-key="olahraga"></div>
-      </div>
-      <div class="toggle-row" data-habit="membaca">
-        <div class="t-label"><span class="em">📖</span>Membaca</div>
-        <div class="switch" data-key="membaca"></div>
-      </div>
-    </div>
-
-    <div class="section-title">Catatan Harian</div>
-    <textarea class="note-input" id="noteInput" placeholder="Bagaimana harimu?"></textarea>
-
-    <div class="section-title">😴 Sleep Tracker</div>
-    <div class="time-row">
-      <div class="time-field"><label>Jam tidur</label><input type="time" id="sleepStart"></div>
-      <div class="time-field"><label>Jam bangun</label><input type="time" id="sleepEnd"></div>
-    </div>
-    <div class="sleep-result">
-      <span>Durasi tidur: <span class="dur" id="sleepDur">–</span></span>
-      <span class="badge neutral" id="sleepBadge">–</span>
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn btn-ghost" id="modalCancel">Batal</button>
-      <button class="btn btn-primary" id="modalSave">Simpan</button>
-    </div>
-  </div>
-</div>
+<!-- Generic overlay/modal container -->
+<div class="overlay" id="overlay"><div class="modal" id="modalBody"></div></div>
 
 <script>
-(function(){
-"use strict";
-
-/* ===================== HELPERS ===================== */
-const $ = (sel, ctx=document)=>ctx.querySelector(sel);
-const $$ = (sel, ctx=document)=>Array.from(ctx.querySelectorAll(sel));
-const pad2 = n => String(n).padStart(2,'0');
-const fmtKey = d => `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
-const DOW_ID = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-const DOW_SHORT = ["Min","Sen","Sel","Rab","Kam","Jum","Sab"];
-const MONTH_ID = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-const rupiah = n => "Rp " + Math.round(n).toLocaleString('id-ID');
-
-function loadJSON(key, fallback){
-  try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
-  catch(e){ return fallback; }
+/* ============================== STORAGE LAYER ============================== */
+const DB_KEYS = ['settings','calendar','routines','routineLog','tasks','study','workoutLog','competitions','water'];
+const DEFAULTS = {
+  settings: {name:'Kamu', theme:'light', notifOn:false, reminderTime:'19:00', h1:true, h3:true},
+  calendar: {}, // 'YYYY-MM-DD': {status:'green'|'red'|null, note:''}
+  routines: [], // {id,name,time,category,description,repeat,reminder,days:[0-6] if repeat, date if not, doneDates:[]}
+  routineLog: {}, // not used separately; done tracked in routines.doneDates
+  tasks: [], // {id,name,subject,description,deadline,priority,status,note}
+  study: [], // {id,subject,material,target,date,time,duration,status,note}
+  workoutLog: {}, // 'YYYY-MM-DD': [exerciseName,...]
+  competitions: [], // {id,name,category,organizer,regLink,infoLink,regDeadline,submitDeadline,announceDate,status,note}
+  water: {target:8, logs:{}} // target and glasses per date
+};
+function load(key){
+  try{ const v = localStorage.getItem('dr_'+key); return v ? JSON.parse(v) : structuredClone(DEFAULTS[key]); }
+  catch(e){ return structuredClone(DEFAULTS[key]); }
 }
-function saveJSON(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+function save(key, val){ localStorage.setItem('dr_'+key, JSON.stringify(val)); }
+let DB = {};
+DB_KEYS.forEach(k => DB[k] = load(k));
+function persist(key){ save(key, DB[key]); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 
-/* ===================== STATE ===================== */
-let habitData = loadJSON('habitData', {});     // { 'YYYY-MM-DD': {belajar,olahraga,membaca,catatan,sleep:{start,end}} }
-let workoutData = loadJSON('workoutData', {}); // { 'YYYY-MM-DD': { done:[idx,...] } }
-let waterData = loadJSON('waterData', {});     // { 'YYYY-MM-DD': { count:n } }
-let financeData = loadJSON('financeData', {}); // { 'YYYY-MM-DD': [ {id,amount,category,note,time} ] }
-
-const today = new Date();
-const todayKey = fmtKey(today);
-
-let calViewDate = new Date(today.getFullYear(), today.getMonth(), 1);
-let modalDateKey = todayKey;
-let selectedCat = 'Makan';
-let currentWorkoutDate = new Date(today);
-
-/* ===================== WORKOUT SCHEDULE ===================== */
-// 0=Minggu .. 6=Sabtu
+/* Seed initial workout schedule (fixed data given by user) */
 const WORKOUT_SCHEDULE = {
-  1: { focus:"Chest, Tricep", exercises:[
-        {name:"Bench Press", meta:"4 set x 10 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Incline Dumbbell Press", meta:"3 set x 12 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Tricep Pushdown", meta:"3 set x 15 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Chest Dips", meta:"3 set x max reps", video:"https://vt.tiktok.com/ZS471ymQ1/"}
-      ]},
-  2: { focus:"Back, Biceps", exercises:[
-        {name:"Pull Up", meta:"4 set x max reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Barbell Row", meta:"4 set x 10 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Lat Pulldown", meta:"3 set x 12 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Barbell Curl", meta:"3 set x 12 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"}
-      ]},
-  3: { focus:"Legs, Core", exercises:[
-        {name:"Squat", meta:"4 set x 10 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Leg Press", meta:"3 set x 12 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Romanian Deadlift", meta:"3 set x 10 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Plank", meta:"3 set x 45 detik", video:"https://vt.tiktok.com/ZS471ymQ1/"}
-      ]},
-  4: { focus:"Chest, Arms", exercises:[
-        {name:"Push Up", meta:"4 set x 15 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Dumbbell Fly", meta:"3 set x 12 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Hammer Curl", meta:"3 set x 12 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Skullcrusher", meta:"3 set x 12 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"}
-      ]},
-  5: { focus:"Arms, Shoulder", exercises:[
-        {name:"Overhead Press", meta:"4 set x 10 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Lateral Raise", meta:"3 set x 15 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Face Pull", meta:"3 set x 15 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"},
-        {name:"Cable Curl", meta:"3 set x 12 reps", video:"https://vt.tiktok.com/ZS471ymQ1/"}
-      ]}
+  1: {label:'Senin', exercises:[{name:'Chest', link:'https://vt.tiktok.com/ZS471ymQ1/'},{name:'Tricep', link:'https://vt.tiktok.com/ZS471dfEM/'}]},
+  2: {label:'Selasa', exercises:[{name:'Back', link:'https://vt.tiktok.com/ZS471Pxoj/'},{name:'Biceps', link:'https://vt.tiktok.com/ZS4712HRU/'}]},
+  3: {label:'Rabu', exercises:[{name:'Legs', link:'https://vt.tiktok.com/ZS471BfDV/'},{name:'Core', link:'https://vt.tiktok.com/ZS471eKar/'}]},
+  4: {label:'Kamis', exercises:[{name:'Chest', link:'https://vt.tiktok.com/ZS471ymQ1/'},{name:'Arms', link:'https://vt.tiktok.com/ZS4712jwV/'}]},
+  5: {label:'Jumat', exercises:[{name:'Arms', link:'https://vt.tiktok.com/ZS4712jwV/'},{name:'Shoulder', link:'https://vt.tiktok.com/ZS471CKea/'}]},
+  6: {label:'Sabtu', exercises:[]},
+  0: {label:'Minggu', exercises:[]}
+};
+const STUDY_SCHEDULE = {
+  1: {label:'Senin', tka:{subject:'🖥️ Kejuruan', focus:'Pelajari konsep/materi dasar → pahami teori, istilah, dan fungsi'}, utbk:{subject:'🧠 PU', focus:'Logika, pola, hubungan sebab-akibat, analisis informasi'}},
+  2: {label:'Selasa', tka:{subject:'🧪 KIK', focus:'Pelajari konsep + rumus/materi penting → buat rangkuman singkat'}, utbk:{subject:'🔢 PK', focus:'Operasi bilangan, aljabar, perbandingan, persentase, peluang'}},
+  3: {label:'Rabu', tka:{subject:'🖥️ Kejuruan', focus:'Latihan soal → 15–25 soal + bahas semua kesalahan'}, utbk:{subject:'📖 PPU', focus:'Kosakata, makna kata, informasi tersurat/tersirat, hubungan antargagasan'}},
+  4: {label:'Kamis', tka:{subject:'🧪 KIK', focus:'Latihan soal → 15–25 soal + bahas kesalahan'}, utbk:{subject:'✍️ PBM', focus:'Ide pokok, kalimat efektif, struktur paragraf, hubungan antarkalimat'}},
+  5: {label:'Jumat', tka:{subject:'🖥️ + 🧪', focus:'Evaluasi TKA → soal campuran Kejuruan & KIK + review materi yang masih lemah'}, utbk:{subject:'🇮🇩🇬🇧 Literasi', focus:'Indonesia: analisis bacaan & inferensi • Inggris: reading, vocabulary & inference'}}
 };
 
-function scheduleFor(date){
-  return WORKOUT_SCHEDULE[date.getDay()] || null; // null = rest day
+/* ============================== HELPERS ============================== */
+const DOW_ID = ['Minggu','Senin','Selasa','Rabu','Kamis',"Jum'at",'Sabtu'];
+const MONTH_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+function todayStr(){ return fmtDate(new Date()); }
+function fmtDate(d){ const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}`; }
+function fmtDateHuman(dstr){
+  if(!dstr) return '-';
+  const d = new Date(dstr+'T00:00:00');
+  return `${DOW_ID[d.getDay()]}, ${d.getDate()} ${MONTH_ID[d.getMonth()]} ${d.getFullYear()}`;
 }
+function daysUntil(dstr){
+  if(!dstr) return null;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const target = new Date(dstr+'T00:00:00');
+  return Math.round((target-now)/86400000);
+}
+function toast(msg){
+  const wrap = document.getElementById('toastWrap');
+  const el = document.createElement('div'); el.className='toast'; el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(()=>{ el.style.transition='opacity .3s'; el.style.opacity='0'; setTimeout(()=>el.remove(),300); }, 2600);
+}
+function esc(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function linkify(url){ return url ? `<a href="${esc(url)}" target="_blank" rel="noopener" style="color:var(--brand); text-decoration:none;">${esc(url)}</a>` : ''; }
 
-/* ===================== NAVIGATION ===================== */
-function goToPage(name){
-  $$('.page').forEach(p=>p.classList.toggle('active', p.id === 'page-'+name));
-  $$('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.page===name));
-  $$('.bn-item').forEach(n=>n.classList.toggle('active', n.dataset.page===name));
-  if(name==='dashboard') renderDashboard();
-  if(name==='habit') renderCalendar();
-  if(name==='workout') renderWorkoutPage();
-  if(name==='water') renderWater();
-  if(name==='finance') renderFinance();
-  if(name==='statistik') renderStatistik();
+/* ============================== NAVIGATION ============================== */
+const NAV_ITEMS = [
+  {id:'dashboard', ic:'🏠', label:'Dashboard'},
+  {id:'calendar', ic:'📅', label:'Calendar'},
+  {id:'routine', ic:'✅', label:'Daily Routine'},
+  {id:'water', ic:'💧', label:'Minum Air'},
+  {id:'tasks', ic:'📝', label:'PR & Tasks'},
+  {id:'study', ic:'📚', label:'Study Planner'},
+  {id:'workout', ic:'🏋️', label:'Workout'},
+  {id:'competitions', ic:'🏆', label:'Lomba'},
+  {id:'stats', ic:'📊', label:'Statistics'},
+  {id:'settings', ic:'⚙️', label:'Settings'},
+];
+const BOTTOM_NAV = NAV_ITEMS.map(n=>n.id);
+
+function buildNav(){
+  const side = document.getElementById('sideNav');
+  side.innerHTML = NAV_ITEMS.map(n => `<button class="nav-item" data-nav="${n.id}" onclick="goto('${n.id}')"><span class="ic">${n.ic}</span><span>${n.label}</span></button>`).join('');
+  const bottom = document.getElementById('bottomNav');
+  const renderBottomItem = id => {
+    const n = NAV_ITEMS.find(x=>x.id===id);
+    return `<button class="bn-item" data-nav="${id}" onclick="goto('${id}')"><span class="ic">${n.ic}</span><span>${n.label.split(' ')[0]}</span></button>`;
+  };
+  bottom.innerHTML = `<div class="bn-track">${BOTTOM_NAV.map(renderBottomItem).join('')}</div>`;
+}
+let currentView = 'dashboard';
+function goto(view){
+  currentView = view;
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active', b.dataset.nav===view));
+  document.querySelector(`#bottomNav [data-nav="${view}"]`)?.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+  renderAll();
   window.scrollTo({top:0, behavior:'smooth'});
 }
-$$('.nav-item, .bn-item').forEach(el=>{
-  el.addEventListener('click', ()=>goToPage(el.dataset.page));
-});
 
-/* ===================== HABIT STATUS LOGIC ===================== */
-function habitStatus(key){
-  const d = habitData[key];
-  if(!d) return 'empty';
-  const vals = [!!d.belajar, !!d.olahraga, !!d.membaca];
-  const doneCount = vals.filter(Boolean).length;
-  if(doneCount === 3) return 'green';
-  if(doneCount === 0) return 'red';
-  return 'yellow';
+function setupSwipeNavigation(){
+  const main = document.querySelector('.main');
+  let startX = 0;
+  let startY = 0;
+  main.addEventListener('touchstart', e=>{
+    if(e.touches.length!==1) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, {passive:true});
+  main.addEventListener('touchend', e=>{
+    if(e.changedTouches.length!==1 || e.target.closest('button,a,input,textarea,select')) return;
+    const deltaX = e.changedTouches[0].clientX - startX;
+    const deltaY = e.changedTouches[0].clientY - startY;
+    if(Math.abs(deltaX)<60 || Math.abs(deltaX)<=Math.abs(deltaY)) return;
+    const currentIndex = NAV_ITEMS.findIndex(item=>item.id===currentView);
+    const nextIndex = deltaX<0 ? currentIndex+1 : currentIndex-1;
+    if(nextIndex>=0 && nextIndex<NAV_ITEMS.length) goto(NAV_ITEMS[nextIndex].id);
+  }, {passive:true});
 }
 
-/* ===================== DASHBOARD ===================== */
+/* ============================== THEME ============================== */
+function applyTheme(){
+  document.documentElement.setAttribute('data-theme', DB.settings.theme);
+  document.body.setAttribute('data-theme', DB.settings.theme);
+  const dark = DB.settings.theme==='dark';
+  document.getElementById('setDarkMode').checked = dark;
+  document.getElementById('themeToggleBtnDesktop').innerHTML = `<span class="ic">${dark?'☀️':'🌙'}</span><span>${dark?'Light Mode':'Dark Mode'}</span>`;
+  document.getElementById('themeToggleBtnMobile').textContent = dark?'☀️':'🌙';
+}
+function toggleTheme(){
+  DB.settings.theme = DB.settings.theme==='dark' ? 'light' : 'dark';
+  persist('settings'); applyTheme();
+}
+document.getElementById('themeToggleBtnDesktop').onclick = toggleTheme;
+document.getElementById('themeToggleBtnMobile').onclick = toggleTheme;
+
+/* ============================== MODAL SYSTEM ============================== */
+function openModal(html){
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('overlay').classList.add('show');
+}
+function closeModal(){ document.getElementById('overlay').classList.remove('show'); }
+document.getElementById('overlay').addEventListener('click', e=>{ if(e.target.id==='overlay') closeModal(); });
+
+/* ============================== QUICK ADD ============================== */
+function openQuickAdd(){
+  openModal(`
+    <div class="modal-head"><h3 class="modal-title">Apa yang ingin ditambahkan?</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="quickpick">
+      <div class="qp-item" onclick="closeModal(); openTaskModal();"><span class="qp-ic">📝</span>PR</div>
+      <div class="qp-item" onclick="closeModal(); openStudyModal();"><span class="qp-ic">📚</span>Jadwal Belajar</div>
+      <div class="qp-item" onclick="closeModal(); goto('workout');"><span class="qp-ic">🏋️</span>Workout</div>
+      <div class="qp-item" onclick="closeModal(); openCompModal();"><span class="qp-ic">🏆</span>Lomba</div>
+      <div class="qp-item" onclick="closeModal(); openRoutineModal();"><span class="qp-ic">✅</span>Daily Routine</div>
+      <div class="qp-item" onclick="closeModal(); goto('calendar');"><span class="qp-ic">📅</span>Event / Kalender</div>
+    </div>`);
+}
+
+/* ============================== DASHBOARD ============================== */
 function renderDashboard(){
-  const dow = today.getDay();
-  $('#dhDay').textContent = DOW_ID[dow].toUpperCase();
-  $('#dhDate').textContent = `${today.getDate()} ${MONTH_ID[today.getMonth()]} ${today.getFullYear()}`;
+  const now = new Date();
+  document.getElementById('dashGreeting').textContent = `Halo, ${DB.settings.name || 'Kamu'} 👋`;
+  document.getElementById('dashDate').textContent = fmtDateHuman(todayStr());
 
-  const sched = scheduleFor(today);
-  $('#dhLine').innerHTML = sched
-    ? `Workout: <b>${sched.focus}</b> 💪 — jangan lupa checklist habit hari ini!`
-    : `Hari ini <b>rest day</b> 🌿 — waktu istirahat & recovery.`;
+  const today = todayStr();
+  const dow = now.getDay();
+  const todaysRoutines = getRoutinesForDate(today);
+  const doneCount = todaysRoutines.filter(r=>r.doneDates.includes(today)).length;
+  const pct = todaysRoutines.length ? Math.round(doneCount/todaysRoutines.length*100) : 0;
+  document.getElementById('todayPct').textContent = pct+'%';
+  const circumference = 188.5;
+  document.getElementById('ringFill').style.strokeDashoffset = circumference - (circumference*pct/100);
 
-  const h = habitData[todayKey] || {};
-  const habitDone = [h.belajar,h.olahraga,h.membaca].filter(Boolean).length;
+  // Focus list
+  const focusItems = [];
+  const wSched = WORKOUT_SCHEDULE[dow];
+  if(wSched && wSched.exercises.length) focusItems.push(`🏋️ ${wSched.exercises.map(e=>e.name).join(' + ')}`);
+  const studyToday = DB.study.filter(s=>s.date===today);
+  if(studyToday.length) focusItems.push(`📚 ${studyToday.map(s=>s.subject).slice(0,2).join(', ')}`);
+  const prDue = DB.tasks.filter(t=>t.status!=='Selesai' && t.deadline && daysUntil(t.deadline)<=1);
+  if(prDue.length) focusItems.push(`📝 ${prDue.length} PR mendesak`);
+  const compDue = DB.competitions.filter(c=>{
+    const d = c.regDeadline || c.submitDeadline; return d && daysUntil(d)<=3 && daysUntil(d)>=0 && !['Selesai','Menang','Tidak menang'].includes(c.status);
+  });
+  if(compDue.length) focusItems.push(`🏆 ${compDue.length} deadline lomba dekat`);
+  document.getElementById('focusList').innerHTML = focusItems.length ? focusItems.map(f=>`<div>${f}</div>`).join('') : '<div style="color:var(--text-faint);">Tidak ada fokus khusus hari ini. Nikmati harimu ✨</div>';
 
-  const wo = workoutData[todayKey] || {done:[]};
-  const woTotal = sched ? sched.exercises.length : 0;
-  const woDone = sched ? wo.done.filter(i=>i<woTotal).length : 0;
-  const woPct = sched ? (woTotal? woDone/woTotal : 0) : 1;
+  // Reminders
+  const reminders = [];
+  prDue.forEach(t=>reminders.push({ic:'⚠️', text:`PR ${t.subject||t.name} ${daysUntil(t.deadline)<0?'sudah lewat deadline':(daysUntil(t.deadline)===0?'deadline hari ini':'deadline besok')}`, tone:'red'}));
+  compDue.forEach(c=>reminders.push({ic:'🔥', text:`Deadline lomba "${c.name}" ${daysUntil(c.regDeadline||c.submitDeadline)} hari lagi`, tone:'yellow'}));
+  if(wSched && wSched.exercises.length){
+    const doneEx = (DB.workoutLog[today]||[]);
+    if(doneEx.length < wSched.exercises.length) reminders.push({ic:'🏋️', text:`Workout hari ini: ${wSched.exercises.map(e=>e.name).join(' + ')}`, tone:'orange'});
+  }
+  if(studyToday.some(s=>s.status!=='Selesai')) reminders.push({ic:'⏰', text:'Waktunya belajar UTBK/TKA!', tone:'purple'});
+  document.getElementById('reminderList').innerHTML = reminders.length ? reminders.map(r=>`<div style="display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-bottom:1px solid var(--border); font-size:13.5px;"><span>${r.ic}</span><span>${esc(r.text)}</span></div>`).join('') : `<div class="empty" style="padding:20px 4px;"><div class="em-ic">🎉</div><div class="em-title">Tidak ada reminder</div><div class="em-sub">Semua terkendali!</div></div>`;
 
-  const w = waterData[todayKey] || {count:0};
-  const waterPct = w.count/8;
+  // Stats
+  document.getElementById('statRoutine').textContent = `${doneCount}/${todaysRoutines.length}`;
+  document.getElementById('statPR').textContent = DB.tasks.filter(t=>t.status!=='Selesai').length;
+  document.getElementById('statStreak').textContent = computeWorkoutStreak();
+  document.getElementById('statStudy').textContent = computeStudyHoursThisWeek()+'j';
 
-  const finList = financeData[todayKey] || [];
-  const finTotal = finList.reduce((s,t)=>s+t.amount,0);
-
-  const habitPct = habitDone/3;
-  const overall = Math.round(((habitPct + woPct + waterPct)/3) * 100);
-
-  const circumference = 276.5;
-  const offset = circumference - (Math.min(overall,100)/100)*circumference;
-  $('#dhRingFg').setAttribute('stroke-dashoffset', offset);
-  $('#dhRingPct').textContent = overall + '%';
-
-  const habitBadge = habitStatus(todayKey);
-  const badgeMap = {green:['Selesai','green'], yellow:['Sebagian','yellow'], red:['Belum mulai','red'], empty:['Belum diisi','neutral']};
-
-  const woBadge = !sched ? ['Rest day','neutral'] : (woDone===woTotal && woTotal>0 ? ['Selesai','green'] : (woDone>0? ['Berjalan','yellow']:['Belum mulai','red']));
-
-  $('#dashSummary').innerHTML = `
-    <div class="sum-card">
-      <div class="top"><div class="icon" style="background:var(--primary-tint);">✅</div>
-      <span class="badge ${badgeMap[habitBadge][1]}">${badgeMap[habitBadge][0]}</span></div>
-      <div class="label">Habit hari ini</div>
-      <div class="value">${habitDone} / 3</div>
-      <div class="foot">Belajar · Olahraga · Membaca</div>
-    </div>
-    <div class="sum-card">
-      <div class="top"><div class="icon" style="background:var(--accent-tint);">💪</div>
-      <span class="badge ${woBadge[1]}">${woBadge[0]}</span></div>
-      <div class="label">Workout hari ini</div>
-      <div class="value">${sched ? sched.focus : 'Rest day'}</div>
-      <div class="foot">${sched ? woDone+' / '+woTotal+' gerakan selesai' : 'Nikmati istirahatmu'}</div>
-    </div>
-    <div class="sum-card">
-      <div class="top"><div class="icon" style="background:#E4F4F2;">💧</div>
-      <span class="badge ${w.count>=8?'green':(w.count>0?'yellow':'red')}">${w.count}/8</span></div>
-      <div class="label">Air minum</div>
-      <div class="value">${w.count} gelas</div>
-      <div class="foot">Target 8 gelas / hari</div>
-    </div>
-    <div class="sum-card">
-      <div class="top"><div class="icon" style="background:var(--yellow-tint);">💰</div>
-      <span class="badge ${finList.length?'neutral':'neutral'}">${finList.length} transaksi</span></div>
-      <div class="label">Pengeluaran hari ini</div>
-      <div class="value">${rupiah(finTotal)}</div>
-      <div class="foot">${finList.length ? 'Terakhir: '+finList[finList.length-1].category : 'Belum ada catatan'}</div>
-    </div>
-  `;
+  // Workout today card
+  document.getElementById('dashWorkout').innerHTML = renderWorkoutMini(today, dow);
+  // Study today card
+  document.getElementById('dashStudy').innerHTML = studyToday.length ? studyToday.map(s=>`
+    <div class="row-card" style="margin-bottom:8px;">
+      <div class="row-main"><div class="row-title">${esc(s.subject)} — ${esc(s.material)}</div><div class="row-desc">${esc(s.time)||''} ${s.duration?`(${s.duration} menit)`:''}</div></div>
+      <span class="chip chip-purple">${esc(s.status)}</span>
+    </div>`).join('') : emptyState('📚','Belum ada jadwal belajar','Buat Jadwal','openStudyModal()');
+  // PR urgent
+  const prSorted = [...DB.tasks].filter(t=>t.status!=='Selesai').sort((a,b)=>(a.deadline||'9999').localeCompare(b.deadline||'9999')).slice(0,3);
+  document.getElementById('dashPR').innerHTML = prSorted.length ? prSorted.map(t=>taskRowHTML(t,true)).join('') : emptyState('📝','Belum ada tugas','Tambahkan PR','openTaskModal()');
+  // Comp nearest
+  const compSorted = [...DB.competitions].filter(c=>!['Selesai','Menang','Tidak menang'].includes(c.status)).sort((a,b)=>(a.regDeadline||a.submitDeadline||'9999').localeCompare(b.regDeadline||b.submitDeadline||'9999')).slice(0,3);
+  document.getElementById('dashComp').innerHTML = compSorted.length ? compSorted.map(c=>compRowHTML(c,true)).join('') : emptyState('🏆','Belum ada lomba','Tambahkan Lomba','openCompModal()');
+}
+function emptyState(ic,title,btnLabel,onclickFn){
+  return `<div class="empty"><div class="em-ic">${ic}</div><div class="em-title">${title}</div><div class="em-sub">Mulai dengan menambahkan data pertamamu.</div>${btnLabel?`<button class="btn btn-primary btn-sm" onclick="${onclickFn}">${btnLabel}</button>`:''}</div>`;
 }
 
-/* ===================== HABIT CALENDAR ===================== */
+/* ============================== ROUTINES ============================== */
+function getRoutinesForDate(dateStr){
+  const d = new Date(dateStr+'T00:00:00'); const dow = d.getDay();
+  return DB.routines.filter(r=>{
+    if(r.repeat==='none') return r.date===dateStr;
+    if(r.repeat==='daily') return true;
+    if(r.repeat==='weekly') return r.days && r.days.includes(dow);
+    return false;
+  }).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+}
+let routineViewDate = todayStr();
+function renderRoutine(){
+  document.getElementById('routineDateLabel').textContent = fmtDateHuman(routineViewDate);
+  const search = (document.getElementById('routineSearch').value||'').toLowerCase();
+  const cat = document.getElementById('routineCatFilter').value;
+  let items = getRoutinesForDate(routineViewDate);
+  if(search) items = items.filter(r=>r.name.toLowerCase().includes(search));
+  if(cat) items = items.filter(r=>r.category===cat);
+  const tl = document.getElementById('routineTimeline');
+  if(!items.length){ tl.innerHTML = emptyState('✅','Belum ada kegiatan','+ Tambah Kegiatan','openRoutineModal()'); return; }
+  tl.innerHTML = items.map(r=>{
+    const done = r.doneDates.includes(routineViewDate);
+    return `<div class="tl-item ${done?'done':''}" id="tl-${r.id}">
+      <div class="tl-rail"><div class="tl-dot"></div><div class="tl-line"></div></div>
+      <div class="tl-body">
+        <div style="display:flex; gap:12px; align-items:center; min-width:0;">
+          <div class="tl-time">${esc(r.time||'--:--')}</div>
+          <div style="min-width:0;">
+            <div class="tl-name">${esc(r.name)}</div>
+            <div class="tl-meta">${r.category?`<span class="chip chip-blue" style="padding:1px 8px;">${esc(r.category)}</span>`:''} ${r.repeat!=='none'?'🔁':''} ${r.reminder?'🔔':''}</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:4px;">
+          <div class="tl-actions">
+            <button class="iconbtn" onclick="openRoutineModal('${r.id}')">✏️</button>
+            <button class="iconbtn" onclick="deleteRoutine('${r.id}')">🗑️</button>
+          </div>
+          <div class="tl-check" onclick="toggleRoutineDone('${r.id}')">✓</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleRoutineDone(id){
+  const r = DB.routines.find(x=>x.id===id); if(!r) return;
+  const idx = r.doneDates.indexOf(routineViewDate);
+  if(idx>-1) r.doneDates.splice(idx,1); else { r.doneDates.push(routineViewDate); }
+  persist('routines');
+  renderRoutine();
+  const el = document.getElementById('tl-'+id);
+  if(el && idx===-1){ el.querySelector('.tl-check').classList.add('pop'); }
+  renderDashboard();
+}
+function deleteRoutine(id){
+  if(!confirm('Hapus kegiatan ini?')) return;
+  DB.routines = DB.routines.filter(x=>x.id!==id); persist('routines'); renderRoutine(); renderDashboard();
+}
+function openRoutineModal(id){
+  const r = id ? DB.routines.find(x=>x.id===id) : null;
+  const days = r?.days || [];
+  openModal(`
+    <div class="modal-head"><h3 class="modal-title">${r?'Edit':'Tambah'} Kegiatan</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <form id="routineForm">
+      <div class="field"><label>Nama Kegiatan</label><input type="text" id="rf-name" value="${esc(r?.name||'')}" required></div>
+      <div class="field-row">
+        <div class="field"><label>Jam</label><input type="time" id="rf-time" value="${r?.time||'07:00'}"></div>
+        <div class="field"><label>Kategori</label><select id="rf-cat">
+          ${['Sekolah','Belajar','Workout','Ibadah','Pribadi','Lainnya'].map(c=>`<option ${r?.category===c?'selected':''}>${c}</option>`).join('')}
+        </select></div>
+      </div>
+      <div class="field"><label>Deskripsi</label><textarea id="rf-desc">${esc(r?.description||'')}</textarea></div>
+      <div class="field"><label>Repeat</label><select id="rf-repeat" onchange="onRepeatChange()">
+        <option value="none" ${(!r||r.repeat==='none')?'selected':''}>Tidak berulang (sekali)</option>
+        <option value="daily" ${r?.repeat==='daily'?'selected':''}>Setiap hari</option>
+        <option value="weekly" ${r?.repeat==='weekly'?'selected':''}>Hari tertentu tiap minggu</option>
+      </select></div>
+      <div class="field" id="rf-date-field" style="${r?.repeat==='weekly'?'display:none;':''}"><label>Tanggal</label><input type="date" id="rf-date" value="${r?.date||routineViewDate}"></div>
+      <div class="field" id="rf-days-field" style="${(!r||r.repeat!=='weekly')?'display:none;':''}">
+        <label>Hari</label>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          ${DOW_ID.map((d,i)=>`<label style="display:flex; align-items:center; gap:4px; font-size:12px; background:var(--surface-2); padding:5px 9px; border-radius:8px;"><input type="checkbox" class="rf-day" value="${i}" ${days.includes(i)?'checked':''}> ${d.slice(0,3)}</label>`).join('')}
+        </div>
+      </div>
+      <div class="chk-row"><input type="checkbox" id="rf-reminder" ${r?.reminder?'checked':''}> Aktifkan reminder untuk kegiatan ini</div>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeModal()">Batal</button>
+        <button type="submit" class="btn btn-primary">${r?'Simpan':'Tambah'}</button>
+      </div>
+    </form>`);
+  document.getElementById('routineForm').onsubmit = e=>{
+    e.preventDefault();
+    const repeat = document.getElementById('rf-repeat').value;
+    const daysSel = Array.from(document.querySelectorAll('.rf-day:checked')).map(x=>+x.value);
+    const data = {
+      id: r?r.id:uid(),
+      name: document.getElementById('rf-name').value.trim(),
+      time: document.getElementById('rf-time').value,
+      category: document.getElementById('rf-cat').value,
+      description: document.getElementById('rf-desc').value.trim(),
+      repeat, days: repeat==='weekly'?daysSel:[],
+      date: repeat==='none' ? document.getElementById('rf-date').value : null,
+      reminder: document.getElementById('rf-reminder').checked,
+      doneDates: r?.doneDates || []
+    };
+    if(!data.name) return;
+    if(r){ Object.assign(r, data); } else { DB.routines.push(data); }
+    persist('routines'); closeModal(); renderRoutine(); renderDashboard(); toast(r?'Kegiatan diperbarui':'Kegiatan ditambahkan');
+  };
+}
+function onRepeatChange(){
+  const v = document.getElementById('rf-repeat').value;
+  document.getElementById('rf-date-field').style.display = v==='none' ? '' : 'none';
+  document.getElementById('rf-days-field').style.display = v==='weekly' ? '' : 'none';
+}
+
+function waterCount(){ return Math.max(0, +(DB.water.logs[todayStr()]||0)); }
+function renderWater(){
+  const count = waterCount();
+  const target = Math.max(1, +(DB.water.target||8));
+  const pct = Math.min(100, Math.round(count/target*100));
+  document.getElementById('waterCount').textContent = count;
+  document.getElementById('waterTargetLabel').textContent = target;
+  document.getElementById('waterTarget').value = target;
+  document.getElementById('waterProgressBar').style.width = pct+'%';
+  document.getElementById('waterRingFill').style.strokeDashoffset = 188.5 - (188.5*pct/100);
+}
+function addWater(amount){
+  DB.water.logs[todayStr()] = Math.max(0, waterCount()+amount);
+  persist('water'); renderWater(); renderDashboard();
+  toast(amount>0 ? 'Air minum ditambahkan' : 'Jumlah air dikurangi');
+}
+function saveWaterTarget(){
+  DB.water.target = Math.min(30, Math.max(1, +(document.getElementById('waterTarget').value||8)));
+  persist('water'); renderWater();
+  toast('Target air disimpan');
+}
+function resetWater(){
+  DB.water.logs[todayStr()] = 0;
+  persist('water'); renderWater(); renderDashboard(); toast('Catatan air hari ini direset');
+}
+
+/* ============================== TASKS / PR ============================== */
+function taskRowHTML(t, compact){
+  const dleft = t.deadline ? daysUntil(t.deadline) : null;
+  let flag = '';
+  if(dleft!==null && t.status!=='Selesai'){
+    if(dleft<0) flag = `<span class="deadline-flag chip-red">🔴 Deadline terlewat</span>`;
+    else if(dleft===0) flag = `<span class="deadline-flag chip-red">🔥 Deadline hari ini</span>`;
+    else if(dleft===1) flag = `<span class="deadline-flag chip-yellow">🟡 Deadline besok</span>`;
+    else flag = `<span class="deadline-flag chip-gray">Deadline ${dleft} hari lagi</span>`;
+  }
+  const prioClass = 'priority-'+t.priority;
+  return `<div class="row-card">
+    <div class="tl-check" style="margin-top:2px; ${t.status==='Selesai'?'background:var(--green); border-color:var(--green); color:#fff;':''}" onclick="cycleTaskStatus('${t.id}')">${t.status==='Selesai'?'✓':''}</div>
+    <div class="row-main">
+      <div class="row-top">
+        <span class="row-title ${t.status==='Selesai'?'strike':''}">${esc(t.name)}</span>
+        <span class="chip chip-blue">${esc(t.subject||'-')}</span>
+        <span class="${prioClass}" style="font-size:11.5px; font-weight:700;">${t.priority==='Urgent'?'🔴':t.priority==='Tinggi'?'🟠':t.priority==='Sedang'?'🟡':'⚪'} ${t.priority}</span>
+      </div>
+      ${!compact && t.description ? `<div class="row-desc">${esc(t.description)}</div>` : ''}
+      <div class="row-meta">${flag} <span class="chip chip-gray">${esc(t.status)}</span></div>
+    </div>
+    ${!compact?`<div class="row-actions"><button class="iconbtn" onclick="openTaskModal('${t.id}')">✏️</button><button class="iconbtn" onclick="deleteTask('${t.id}')">🗑️</button></div>`:''}
+  </div>`;
+}
+function cycleTaskStatus(id){
+  const t = DB.tasks.find(x=>x.id===id); if(!t) return;
+  const order = ['Belum dikerjakan','Sedang dikerjakan','Selesai'];
+  t.status = t.status==='Selesai' ? 'Belum dikerjakan' : order[order.indexOf(t.status)+1];
+  persist('tasks'); renderTasks(); renderDashboard(); renderStats();
+}
+function renderTasks(){
+  const search = (document.getElementById('taskSearch').value||'').toLowerCase();
+  const st = document.getElementById('taskStatusFilter').value;
+  const pr = document.getElementById('taskPriorityFilter').value;
+  let items = [...DB.tasks];
+  if(search) items = items.filter(t=>t.name.toLowerCase().includes(search)||((t.subject||'').toLowerCase().includes(search)));
+  if(st) items = items.filter(t=>t.status===st);
+  if(pr) items = items.filter(t=>t.priority===pr);
+  items.sort((a,b)=>(a.deadline||'9999').localeCompare(b.deadline||'9999'));
+  const el = document.getElementById('tasksList');
+  el.innerHTML = items.length ? items.map(t=>taskRowHTML(t,false)).join('') : (DB.tasks.length ? `<div class="empty"><div class="em-ic">🔍</div><div class="em-title">Tidak ditemukan</div><div class="em-sub">Coba ubah kata kunci atau filter.</div></div>` : emptyState('📝','Belum ada tugas','+ Tambahkan PR','openTaskModal()'));
+}
+function openTaskModal(id){
+  const t = id ? DB.tasks.find(x=>x.id===id) : null;
+  openModal(`
+    <div class="modal-head"><h3 class="modal-title">${t?'Edit':'Tambah'} PR / Tugas</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <form id="taskForm">
+      <div class="field"><label>Nama Tugas</label><input type="text" id="tf-name" value="${esc(t?.name||'')}" required></div>
+      <div class="field"><label>Mata Pelajaran</label><input type="text" id="tf-subject" value="${esc(t?.subject||'')}"></div>
+      <div class="field"><label>Deskripsi</label><textarea id="tf-desc">${esc(t?.description||'')}</textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Deadline</label><input type="date" id="tf-deadline" value="${t?.deadline||''}"></div>
+        <div class="field"><label>Prioritas</label><select id="tf-priority">
+          ${['Rendah','Sedang','Tinggi','Urgent'].map(p=>`<option ${t?.priority===p?'selected':''}>${p}</option>`).join('')}
+        </select></div>
+      </div>
+      <div class="field"><label>Status</label><select id="tf-status">
+        ${['Belum dikerjakan','Sedang dikerjakan','Selesai'].map(s=>`<option ${t?.status===s?'selected':''}>${s}</option>`).join('')}
+      </select></div>
+      <div class="field"><label>Catatan</label><textarea id="tf-note">${esc(t?.note||'')}</textarea></div>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeModal()">Batal</button>
+        <button type="submit" class="btn btn-primary">${t?'Simpan':'Tambah'}</button>
+      </div>
+    </form>`);
+  document.getElementById('taskForm').onsubmit = e=>{
+    e.preventDefault();
+    const data = {
+      id: t?t.id:uid(),
+      name: document.getElementById('tf-name').value.trim(),
+      subject: document.getElementById('tf-subject').value.trim(),
+      description: document.getElementById('tf-desc').value.trim(),
+      deadline: document.getElementById('tf-deadline').value,
+      priority: document.getElementById('tf-priority').value,
+      status: document.getElementById('tf-status').value,
+      note: document.getElementById('tf-note').value.trim(),
+    };
+    if(!data.name) return;
+    if(t){ Object.assign(t,data); } else { DB.tasks.push(data); }
+    persist('tasks'); closeModal(); renderTasks(); renderDashboard(); renderStats(); toast(t?'Tugas diperbarui':'Tugas ditambahkan');
+  };
+}
+function deleteTask(id){ if(!confirm('Hapus tugas ini?')) return; DB.tasks = DB.tasks.filter(x=>x.id!==id); persist('tasks'); renderTasks(); renderDashboard(); }
+
+/* ============================== STUDY PLANNER ============================== */
+function weekRange(d=new Date()){
+  const day = d.getDay(); const diffToMon = (day===0?-6:1-day);
+  const mon = new Date(d); mon.setDate(d.getDate()+diffToMon); mon.setHours(0,0,0,0);
+  const sun = new Date(mon); sun.setDate(mon.getDate()+6);
+  return [fmtDate(mon), fmtDate(sun)];
+}
+function computeStudyHoursThisWeek(){
+  const [start,end] = weekRange();
+  const mins = DB.study.filter(s=>s.date>=start && s.date<=end).reduce((a,s)=>a+(+s.duration||0),0);
+  return Math.round(mins/60*10)/10;
+}
+function computeStudyStreak(){
+  let streak=0; let d=new Date();
+  while(true){
+    const ds = fmtDate(d);
+    const hasSession = DB.study.some(s=>s.date===ds && s.status==='Selesai');
+    if(hasSession){ streak++; d.setDate(d.getDate()-1); } else break;
+  }
+  return streak;
+}
+function renderStudySchedule(){
+  const todaySchedule = STUDY_SCHEDULE[new Date().getDay()];
+  const todayEl = document.getElementById('studyScheduleToday');
+  const weekEl = document.getElementById('studyScheduleWeek');
+  if(!todaySchedule){
+    todayEl.innerHTML = '<div class="empty" style="padding:20px 4px;"><div class="em-ic">😴</div><div class="em-title">Tidak ada jadwal tetap</div><div class="em-sub">Gunakan hari ini untuk istirahat atau mengejar materi.</div></div>';
+  } else {
+    todayEl.innerHTML = [
+      {time:'07.00–08.00', label:'TKA', data:todaySchedule.tka, tone:'chip-blue'},
+      {time:'20.00–21.00', label:'UTBK', data:todaySchedule.utbk, tone:'chip-purple'}
+    ].map(item=>`<div class="workout-card">
+      <div class="wc-ic" style="background:var(--${item.label==='TKA'?'blue':'purple'}-bg); color:var(--${item.label==='TKA'?'blue':'purple'});">${item.label==='TKA'?'📚':'🧠'}</div>
+      <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:13.5px;">${item.time} <span class="chip ${item.tone}" style="margin-left:4px;">${item.label}</span></div><div style="font-size:13px; margin-top:4px;">${item.data.subject}</div><div class="row-desc" style="margin-top:3px;">${item.data.focus}</div></div>
+    </div>`).join('');
+  }
+  weekEl.innerHTML = Object.values(STUDY_SCHEDULE).map(schedule=>`<div class="workout-card">
+    <div class="wc-ic" style="background:var(--blue-bg); color:var(--blue);">📚</div>
+    <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:13.5px;">${schedule.label}</div><div class="row-desc" style="margin-top:4px;"><b>07.00–08.00 TKA · ${schedule.tka.subject}</b><br>${schedule.tka.focus}</div><div class="row-desc" style="margin-top:5px;"><b>20.00–21.00 UTBK · ${schedule.utbk.subject}</b><br>${schedule.utbk.focus}</div></div>
+  </div>`).join('');
+}
+function renderStudy(){
+  renderStudySchedule();
+  const [start,end] = weekRange();
+  const weekItems = DB.study.filter(s=>s.date>=start && s.date<=end);
+  document.getElementById('studyTotalHours').textContent = computeStudyHoursThisWeek()+'j';
+  document.getElementById('studySessions').textContent = weekItems.length;
+  document.getElementById('studyDone').textContent = DB.study.filter(s=>s.status==='Selesai').length;
+  document.getElementById('studyStreak').textContent = computeStudyStreak();
+  const donePct = weekItems.length ? Math.round(weekItems.filter(s=>s.status==='Selesai').length/weekItems.length*100) : 0;
+  document.getElementById('studyProgressBar').style.width = donePct+'%';
+
+  const sorted = [...DB.study].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  const el = document.getElementById('studyList');
+  if(!sorted.length){ el.innerHTML = emptyState('📚','Belum ada jadwal belajar','+ Buat Jadwal','openStudyModal()'); return; }
+  // group by date
+  const groups = {};
+  sorted.forEach(s=>{ (groups[s.date]=groups[s.date]||[]).push(s); });
+  el.innerHTML = Object.keys(groups).sort().map(date=>`
+    <div class="section-title" style="margin-top:18px;">${fmtDateHuman(date)}</div>
+    ${groups[date].map(s=>`
+      <div class="row-card">
+        <div class="tl-check" style="margin-top:2px; ${s.status==='Selesai'?'background:var(--purple); border-color:var(--purple); color:#fff;':''}" onclick="cycleStudyStatus('${s.id}')">${s.status==='Selesai'?'✓':''}</div>
+        <div class="row-main">
+          <div class="row-top"><span class="row-title ${s.status==='Selesai'?'strike':''}">${esc(s.subject)} — ${esc(s.material)}</span></div>
+          <div class="row-desc">${s.time?esc(s.time):''} ${s.duration?`· ${s.duration} menit`:''} ${s.target?`· Target: ${esc(s.target)}`:''}</div>
+          ${s.note?`<div class="row-desc" style="margin-top:3px;">📝 ${esc(s.note)}</div>`:''}
+          <div class="row-meta"><span class="chip chip-purple">${esc(s.status)}</span></div>
+        </div>
+        <div class="row-actions"><button class="iconbtn" onclick="openStudyModal('${s.id}')">✏️</button><button class="iconbtn" onclick="deleteStudy('${s.id}')">🗑️</button></div>
+      </div>`).join('')}
+  `).join('');
+}
+function cycleStudyStatus(id){
+  const s = DB.study.find(x=>x.id===id); if(!s) return;
+  const order = ['Belum','Sedang berjalan','Selesai'];
+  s.status = s.status==='Selesai' ? 'Belum' : order[order.indexOf(s.status)+1] || 'Sedang berjalan';
+  persist('study'); renderStudy(); renderDashboard(); renderStats();
+}
+function openStudyModal(id){
+  const s = id ? DB.study.find(x=>x.id===id) : null;
+  openModal(`
+    <div class="modal-head"><h3 class="modal-title">${s?'Edit':'Tambah'} Sesi Belajar</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <form id="studyForm">
+      <div class="field"><label>Mata Pelajaran</label><input type="text" id="sf-subject" value="${esc(s?.subject||'')}" required></div>
+      <div class="field"><label>Materi</label><input type="text" id="sf-material" value="${esc(s?.material||'')}"></div>
+      <div class="field"><label>Target</label><input type="text" id="sf-target" placeholder="Contoh: 20 soal aljabar" value="${esc(s?.target||'')}"></div>
+      <div class="field-row">
+        <div class="field"><label>Tanggal</label><input type="date" id="sf-date" value="${s?.date||todayStr()}"></div>
+        <div class="field"><label>Jam</label><input type="time" id="sf-time" value="${s?.time||'19:00'}"></div>
+      </div>
+      <div class="field"><label>Durasi (menit)</label><input type="number" id="sf-duration" min="5" step="5" value="${s?.duration||60}"></div>
+      <div class="field"><label>Status</label><select id="sf-status">
+        ${['Belum','Sedang berjalan','Selesai'].map(x=>`<option ${s?.status===x?'selected':''}>${x}</option>`).join('')}
+      </select></div>
+      <div class="field"><label>Catatan</label><textarea id="sf-note">${esc(s?.note||'')}</textarea></div>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeModal()">Batal</button>
+        <button type="submit" class="btn btn-primary">${s?'Simpan':'Tambah'}</button>
+      </div>
+    </form>`);
+  document.getElementById('studyForm').onsubmit = e=>{
+    e.preventDefault();
+    const data = {
+      id: s?s.id:uid(),
+      subject: document.getElementById('sf-subject').value.trim(),
+      material: document.getElementById('sf-material').value.trim(),
+      target: document.getElementById('sf-target').value.trim(),
+      date: document.getElementById('sf-date').value,
+      time: document.getElementById('sf-time').value,
+      duration: +document.getElementById('sf-duration').value || 0,
+      status: document.getElementById('sf-status').value,
+      note: document.getElementById('sf-note').value.trim(),
+    };
+    if(!data.subject) return;
+    if(s){ Object.assign(s,data); } else { DB.study.push(data); }
+    persist('study'); closeModal(); renderStudy(); renderDashboard(); renderStats(); toast(s?'Sesi diperbarui':'Sesi ditambahkan');
+  };
+}
+function deleteStudy(id){ if(!confirm('Hapus sesi belajar ini?')) return; DB.study = DB.study.filter(x=>x.id!==id); persist('study'); renderStudy(); renderDashboard(); }
+
+/* ============================== WORKOUT ============================== */
+function computeWorkoutStreak(){
+  let streak=0; let d = new Date();
+  while(true){
+    const ds = fmtDate(d); const dow = d.getDay();
+    const sched = WORKOUT_SCHEDULE[dow];
+    if(!sched.exercises.length){ d.setDate(d.getDate()-1); continue; } // rest day doesn't break streak, skip
+    const log = DB.workoutLog[ds]||[];
+    const allDone = sched.exercises.every(e=>log.includes(e.name));
+    if(allDone){ streak++; d.setDate(d.getDate()-1); } else break;
+  }
+  return streak;
+}
+function renderWorkoutMini(dateStr, dow){
+  const sched = WORKOUT_SCHEDULE[dow];
+  if(!sched.exercises.length) return `<div class="empty" style="padding:20px 4px;"><div class="em-ic">😴</div><div class="em-title">Rest Day</div><div class="em-sub">Istirahat itu penting juga!</div></div>`;
+  const log = DB.workoutLog[dateStr]||[];
+  return sched.exercises.map(ex=>{
+    const done = log.includes(ex.name);
+    return `<div style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border);">
+      <div class="tl-check" style="${done?'background:var(--green); border-color:var(--green); color:#fff;':''}" onclick="toggleWorkoutDone('${dateStr}','${esc(ex.name)}')">${done?'✓':''}</div>
+      <div style="flex:1; font-weight:600; font-size:13.5px; ${done?'text-decoration:line-through; color:var(--text-dim);':''}">${esc(ex.name)}</div>
+      <a href="${ex.link}" target="_blank" rel="noopener" class="btn btn-sm">▶ Video</a>
+    </div>`;
+  }).join('');
+}
+function toggleWorkoutDone(dateStr, exName){
+  DB.workoutLog[dateStr] = DB.workoutLog[dateStr] || [];
+  const idx = DB.workoutLog[dateStr].indexOf(exName);
+  if(idx>-1) DB.workoutLog[dateStr].splice(idx,1); else DB.workoutLog[dateStr].push(exName);
+  persist('workoutLog');
+  renderWorkout(); renderDashboard(); renderStats();
+}
+function renderWorkout(){
+  const now = new Date(); const today = todayStr(); const dow = now.getDay();
+  document.getElementById('workoutDayLabel').textContent = `${DOW_ID[dow]}, ${now.getDate()} ${MONTH_ID[now.getMonth()]} ${now.getFullYear()}`;
+  const todaySched = WORKOUT_SCHEDULE[dow];
+  const todayLog = DB.workoutLog[today]||[];
+  document.getElementById('wStatToday').textContent = `${todayLog.length}/${todaySched.exercises.length}`;
+  // week stats
+  const [start,end] = weekRange();
+  let weekTotal=0, weekDone=0;
+  for(let d=new Date(start+'T00:00:00'); fmtDate(d)<=end; d.setDate(d.getDate()+1)){
+    const sc = WORKOUT_SCHEDULE[d.getDay()]; const ds = fmtDate(d);
+    weekTotal += sc.exercises.length;
+    weekDone += (DB.workoutLog[ds]||[]).filter(x=>sc.exercises.some(e=>e.name===x)).length;
+  }
+  document.getElementById('wStatWeek').textContent = `${weekDone}/${weekTotal}`;
+  let totalDoneAll = 0; Object.values(DB.workoutLog).forEach(arr=>totalDoneAll+=arr.length);
+  document.getElementById('wStatDone').textContent = totalDoneAll;
+  document.getElementById('wStatStreak').textContent = computeWorkoutStreak();
+
+  document.getElementById('workoutToday').innerHTML = renderWorkoutMini(today, dow);
+
+  // week schedule list
+  const weekEl = document.getElementById('workoutWeek');
+  let html = '';
+  for(let i=0;i<7;i++){
+    const d = new Date(start+'T00:00:00'); d.setDate(d.getDate()+i);
+    const ds = fmtDate(d); const sc = WORKOUT_SCHEDULE[d.getDay()];
+    const log = DB.workoutLog[ds]||[];
+    const isToday = ds===today;
+    html += `<div class="workout-card" style="${isToday?'border-color:var(--brand); box-shadow:var(--shadow);':''}">
+      <div class="wc-ic">${sc.exercises.length?'🏋️':'😴'}</div>
+      <div style="flex:1;">
+        <div style="font-weight:700; font-size:13.5px;">${DOW_ID[d.getDay()]} ${isToday?'<span class="chip chip-blue" style="margin-left:4px;">Hari ini</span>':''}</div>
+        <div style="font-size:12.5px; color:var(--text-dim); margin-top:2px;">
+          ${sc.exercises.length ? sc.exercises.map(e=>`${e.name}${log.includes(e.name)?' ✅':''}`).join(' + ') : 'Rest Day'}
+        </div>
+      </div>
+      ${sc.exercises.length?`<span class="chip ${log.length===sc.exercises.length?'chip-green':'chip-gray'}">${log.length}/${sc.exercises.length}</span>`:''}
+    </div>`;
+  }
+  weekEl.innerHTML = html;
+}
+
+/* ============================== COMPETITIONS ============================== */
+function compRowHTML(c, compact){
+  const regDl = c.regDeadline ? daysUntil(c.regDeadline) : null;
+  const subDl = c.submitDeadline ? daysUntil(c.submitDeadline) : null;
+  const nearest = [regDl,subDl].filter(x=>x!==null).sort((a,b)=>a-b)[0];
+  let flag = '';
+  if(nearest!==null && !['Selesai','Menang','Tidak menang','Sudah dikumpulkan'].includes(c.status)){
+    if(nearest<0) flag = `<span class="deadline-flag chip-red">🔴 DEADLINE TERLEWAT</span>`;
+    else if(nearest<=1) flag = `<span class="deadline-flag chip-red">🔥 DEADLINE BESOK</span>`;
+    else flag = `<span class="deadline-flag chip-yellow">Deadline ${nearest} hari lagi</span>`;
+  }
+  return `<div class="row-card">
+    <div class="stat-icon" style="background:var(--yellow-bg); color:var(--yellow); flex-shrink:0;">🏆</div>
+    <div class="row-main">
+      <div class="row-top"><span class="row-title">${esc(c.name)}</span>${c.category?`<span class="chip chip-blue">${esc(c.category)}</span>`:''}</div>
+      ${!compact?`<div class="row-desc">${esc(c.organizer||'')}</div>`:''}
+      <div class="row-meta">${flag} <span class="chip chip-gray">${esc(c.status)}</span></div>
+      ${!compact?`<div class="row-meta">
+        ${c.regLink?`<a href="${esc(c.regLink)}" target="_blank" rel="noopener" style="color:var(--brand); font-weight:700;">🔗 Pendaftaran</a>`:''}
+        ${c.infoLink?`<a href="${esc(c.infoLink)}" target="_blank" rel="noopener" style="color:var(--brand); font-weight:700;">ℹ️ Info</a>`:''}
+      </div>`:''}
+    </div>
+    ${!compact?`<div class="row-actions"><button class="iconbtn" onclick="openCompModal('${c.id}')">✏️</button><button class="iconbtn" onclick="deleteComp('${c.id}')">🗑️</button></div>`:''}
+  </div>`;
+}
+function renderCompetitions(){
+  const search = (document.getElementById('compSearch').value||'').toLowerCase();
+  const st = document.getElementById('compStatusFilter').value;
+  let items = [...DB.competitions];
+  if(search) items = items.filter(c=>c.name.toLowerCase().includes(search));
+  if(st) items = items.filter(c=>c.status===st);
+  items.sort((a,b)=>((a.regDeadline||a.submitDeadline||'9999')).localeCompare(b.regDeadline||b.submitDeadline||'9999'));
+  const el = document.getElementById('compList');
+  el.innerHTML = items.length ? items.map(c=>compRowHTML(c,false)).join('') : (DB.competitions.length ? `<div class="empty"><div class="em-ic">🔍</div><div class="em-title">Tidak ditemukan</div></div>` : emptyState('🏆','Belum ada lomba','+ Tambahkan Lomba','openCompModal()'));
+}
+function openCompModal(id){
+  const c = id ? DB.competitions.find(x=>x.id===id) : null;
+  openModal(`
+    <div class="modal-head"><h3 class="modal-title">${c?'Edit':'Tambah'} Lomba</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <form id="compForm">
+      <div class="field"><label>Nama Lomba</label><input type="text" id="cf-name" value="${esc(c?.name||'')}" required></div>
+      <div class="field-row">
+        <div class="field"><label>Kategori</label><input type="text" id="cf-category" value="${esc(c?.category||'')}" placeholder="Essay, Sains, dll"></div>
+        <div class="field"><label>Penyelenggara</label><input type="text" id="cf-organizer" value="${esc(c?.organizer||'')}"></div>
+      </div>
+      <div class="field"><label>Link Pendaftaran</label><input type="text" id="cf-reglink" value="${esc(c?.regLink||'')}" placeholder="https://..."></div>
+      <div class="field"><label>Link Informasi</label><input type="text" id="cf-infolink" value="${esc(c?.infoLink||'')}" placeholder="https://..."></div>
+      <div class="field-row">
+        <div class="field"><label>Deadline Pendaftaran</label><input type="date" id="cf-regdl" value="${c?.regDeadline||''}"></div>
+        <div class="field"><label>Deadline Pengumpulan</label><input type="date" id="cf-subdl" value="${c?.submitDeadline||''}"></div>
+      </div>
+      <div class="field"><label>Tanggal Pengumuman</label><input type="date" id="cf-announce" value="${c?.announceDate||''}"></div>
+      <div class="field"><label>Status</label><select id="cf-status">
+        ${['Belum daftar','Sudah daftar','Sedang dikerjakan','Sudah dikumpulkan','Menang','Tidak menang','Selesai'].map(s=>`<option ${c?.status===s?'selected':''}>${s}</option>`).join('')}
+      </select></div>
+      <div class="field"><label>Catatan</label><textarea id="cf-note">${esc(c?.note||'')}</textarea></div>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeModal()">Batal</button>
+        <button type="submit" class="btn btn-primary">${c?'Simpan':'Tambah'}</button>
+      </div>
+    </form>`);
+  document.getElementById('compForm').onsubmit = e=>{
+    e.preventDefault();
+    const data = {
+      id: c?c.id:uid(),
+      name: document.getElementById('cf-name').value.trim(),
+      category: document.getElementById('cf-category').value.trim(),
+      organizer: document.getElementById('cf-organizer').value.trim(),
+      regLink: document.getElementById('cf-reglink').value.trim(),
+      infoLink: document.getElementById('cf-infolink').value.trim(),
+      regDeadline: document.getElementById('cf-regdl').value,
+      submitDeadline: document.getElementById('cf-subdl').value,
+      announceDate: document.getElementById('cf-announce').value,
+      status: document.getElementById('cf-status').value,
+      note: document.getElementById('cf-note').value.trim(),
+    };
+    if(!data.name) return;
+    if(c){ Object.assign(c,data); } else { DB.competitions.push(data); }
+    persist('competitions'); closeModal(); renderCompetitions(); renderDashboard(); renderStats(); toast(c?'Lomba diperbarui':'Lomba ditambahkan');
+  };
+}
+function deleteComp(id){ if(!confirm('Hapus lomba ini?')) return; DB.competitions = DB.competitions.filter(x=>x.id!==id); persist('competitions'); renderCompetitions(); renderDashboard(); }
+
+/* ============================== CALENDAR ============================== */
+let calCursor = new Date();
+function calShift(n){ calCursor.setMonth(calCursor.getMonth()+n); renderCalendar(); }
+function calToday(){ calCursor = new Date(); renderCalendar(); }
 function renderCalendar(){
-  $('#calMonthLabel').textContent = `${MONTH_ID[calViewDate.getMonth()]} ${calViewDate.getFullYear()}`;
-
-  const dowRow = $('#calDow');
-  dowRow.innerHTML = DOW_SHORT.map(d=>`<div class="cal-dow">${d}</div>`).join('');
-
-  const y = calViewDate.getFullYear(), m = calViewDate.getMonth();
+  const y = calCursor.getFullYear(), m = calCursor.getMonth();
+  document.getElementById('calMonthLabel').textContent = `${MONTH_ID[m]} ${y}`;
+  document.getElementById('calDow').innerHTML = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
   const firstDay = new Date(y,m,1).getDay();
   const daysInMonth = new Date(y,m+1,0).getDate();
-
   let html = '';
-  for(let i=0;i<firstDay;i++) html += `<div class="cal-cell pad"></div>`;
-  for(let day=1; day<=daysInMonth; day++){
-    const d = new Date(y,m,day);
-    const key = fmtKey(d);
-    const status = habitStatus(key);
-    const statusClass = status==='empty' ? '' : 'status-'+status;
-    const isToday = key===todayKey;
-    html += `<div class="cal-cell ${statusClass} ${isToday?'today':''}" data-key="${key}">
-      <span>${day}</span><span class="dow-dot" style="${status==='empty'?'background:#E4E1F0':''}"></span>
+  for(let i=0;i<firstDay;i++) html += `<div class="cal-cell empty-cell"></div>`;
+  for(let d=1; d<=daysInMonth; d++){
+    const ds = fmtDate(new Date(y,m,d));
+    const info = DB.calendar[ds];
+    const status = info?.status;
+    const isToday = ds===todayStr();
+    html += `<div class="cal-cell ${status==='green'?'st-green':status==='red'?'st-red':''} ${isToday?'today':''}" onclick="openDayModal('${ds}')">
+      <div class="cd-num">${d}</div>
+      ${info?.note ? '<div class="cd-dot"></div>' : ''}
     </div>`;
   }
-  $('#calGrid').innerHTML = html;
-
-  $$('#calGrid .cal-cell:not(.pad)').forEach(cell=>{
-    cell.addEventListener('click', ()=>openHabitModal(cell.dataset.key));
-  });
+  document.getElementById('calGrid').innerHTML = html;
 }
-$('#calPrev').addEventListener('click', ()=>{ calViewDate.setMonth(calViewDate.getMonth()-1); renderCalendar(); });
-$('#calNext').addEventListener('click', ()=>{ calViewDate.setMonth(calViewDate.getMonth()+1); renderCalendar(); });
-
-/* ===================== HABIT MODAL ===================== */
-function openHabitModal(key){
-  modalDateKey = key;
-  const [y,m,d] = key.split('-').map(Number);
-  const dateObj = new Date(y, m-1, d);
-  $('#modalDateTitle').textContent = `${d} ${MONTH_ID[m-1]} ${y}`;
-  $('#modalDowLabel').textContent = DOW_ID[dateObj.getDay()];
-
-  const data = habitData[key] || {};
-  ['belajar','olahraga','membaca'].forEach(k=>{
-    const sw = $(`.switch[data-key="${k}"]`);
-    sw.classList.toggle('on', !!data[k]);
-  });
-  $('#noteInput').value = data.catatan || '';
-
-  const sleep = data.sleep || {};
-  $('#sleepStart').value = sleep.start || '';
-  $('#sleepEnd').value = sleep.end || '';
-  updateSleepPreview();
-
-  $('#habitModalOverlay').classList.add('show');
+function openDayModal(ds){
+  const info = DB.calendar[ds] || {status:null, note:''};
+  openModal(`
+    <div class="modal-head"><h3 class="modal-title">${fmtDateHuman(ds)}</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div style="display:flex; gap:8px; margin-bottom:16px;">
+      <button class="btn ${info.status==='green'?'btn-primary':''}" style="flex:1; justify-content:center; ${info.status==='green'?'background:var(--green); border-color:var(--green);':''}" onclick="setDayStatus('${ds}','green')">🟢 Hijau</button>
+      <button class="btn ${info.status==='red'?'btn-primary':''}" style="flex:1; justify-content:center; ${info.status==='red'?'background:var(--red); border-color:var(--red);':''}" onclick="setDayStatus('${ds}','red')">🔴 Merah</button>
+      <button class="btn" style="flex:1; justify-content:center;" onclick="setDayStatus('${ds}',null)">⚪ Reset</button>
+    </div>
+    <div class="field"><label>📝 Catatan</label><textarea id="dayNote" placeholder="Tulis catatan untuk hari ini...">${esc(info.note||'')}</textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" style="flex:1;" onclick="saveDayNote('${ds}')">Simpan Catatan</button>
+    </div>`);
 }
-function closeHabitModal(){ $('#habitModalOverlay').classList.remove('show'); }
-$('#modalClose').addEventListener('click', closeHabitModal);
-$('#modalCancel').addEventListener('click', closeHabitModal);
-$('#habitModalOverlay').addEventListener('click', e=>{ if(e.target.id==='habitModalOverlay') closeHabitModal(); });
-
-$$('.switch').forEach(sw=>{
-  sw.addEventListener('click', ()=> sw.classList.toggle('on'));
-});
-
-function sleepDuration(start,end){
-  if(!start || !end) return null;
-  const [sh,sm] = start.split(':').map(Number);
-  const [eh,em] = end.split(':').map(Number);
-  let startMin = sh*60+sm, endMin = eh*60+em;
-  let diff = endMin - startMin;
-  if(diff <= 0) diff += 24*60;
-  return diff;
+function setDayStatus(ds, status){
+  DB.calendar[ds] = DB.calendar[ds] || {status:null, note:''};
+  DB.calendar[ds].status = status;
+  persist('calendar'); renderCalendar(); openDayModal(ds); toast('Status tersimpan');
 }
-function updateSleepPreview(){
-  const start = $('#sleepStart').value, end = $('#sleepEnd').value;
-  const mins = sleepDuration(start,end);
-  if(mins===null){ $('#sleepDur').textContent='–'; $('#sleepBadge').textContent='–'; $('#sleepBadge').className='badge neutral'; return; }
-  const h = Math.floor(mins/60), mm = mins%60;
-  $('#sleepDur').textContent = `${h}j ${mm}m`;
-  const [sh] = start.split(':').map(Number);
-  let label, cls;
-  if(mins>=420 && (sh>=20 || sh<1 ? sh<23 || sh>=20 : true) && sh<23 ){ label='😴 Ideal'; cls='green'; }
-  if(sh>=23 || sh<3){ label='🚨 Begadang'; cls='red'; }
-  else if(mins<360){ label='⚠️ Kurang'; cls='yellow'; }
-  else{ label='😴 Ideal'; cls='green'; }
-  $('#sleepBadge').textContent = label;
-  $('#sleepBadge').className = 'badge '+cls;
-}
-$('#sleepStart').addEventListener('change', updateSleepPreview);
-$('#sleepEnd').addEventListener('change', updateSleepPreview);
-
-$('#modalSave').addEventListener('click', ()=>{
-  const key = modalDateKey;
-  const entry = habitData[key] || {};
-  ['belajar','olahraga','membaca'].forEach(k=>{
-    entry[k] = $(`.switch[data-key="${k}"]`).classList.contains('on');
-  });
-  entry.catatan = $('#noteInput').value.trim();
-  const start = $('#sleepStart').value, end = $('#sleepEnd').value;
-  entry.sleep = (start||end) ? {start,end} : entry.sleep;
-  habitData[key] = entry;
-  saveJSON('habitData', habitData);
-  closeHabitModal();
-  renderCalendar();
-  renderDashboard();
-  renderStatistik();
-});
-
-/* ===================== WORKOUT PAGE ===================== */
-function syncOlahragaHabit(dateKey, allDone){
-  const entry = habitData[dateKey] || {};
-  entry.olahraga = allDone;
-  habitData[dateKey] = entry;
-  saveJSON('habitData', habitData);
+function saveDayNote(ds){
+  DB.calendar[ds] = DB.calendar[ds] || {status:null, note:''};
+  DB.calendar[ds].note = document.getElementById('dayNote').value.trim();
+  persist('calendar'); renderCalendar(); closeModal(); toast('Catatan tersimpan');
 }
 
-function renderWeekStrip(){
-  const start = new Date(currentWorkoutDate);
-  start.setDate(start.getDate() - start.getDay()); // Sunday start
-  let html='';
-  for(let i=0;i<7;i++){
-    const d = new Date(start); d.setDate(start.getDate()+i);
-    const key = fmtKey(d);
-    const sched = scheduleFor(d);
-    const isSelected = fmtKey(currentWorkoutDate)===key;
-    const isToday = key===todayKey;
-    const wo = workoutData[key] || {done:[]};
-    let dotColor = 'transparent';
-    if(sched){
-      const total = sched.exercises.length;
-      const doneN = wo.done.filter(i=>i<total).length;
-      dotColor = doneN===0 ? '#EF6167' : (doneN===total ? '#48B583' : '#F2AE3D');
-    }
-    html += `<div class="day-chip ${isSelected?'today':''}" data-key="${key}" style="${isSelected?'':'cursor:pointer;'}">
-      <div class="dname">${DOW_SHORT[d.getDay()]}${isToday?' •':''}</div>
-      <div class="dfocus">${sched? sched.focus.split(',')[0] : 'Rest'}</div>
-      <div class="dstatus" style="background:${dotColor}"></div>
-    </div>`;
+/* ============================== STATISTICS ============================== */
+function renderStats(){
+  const totalTasks = DB.tasks.length;
+  const doneTasks = DB.tasks.filter(t=>t.status==='Selesai').length;
+  document.getElementById('sPR').textContent = totalTasks ? Math.round(doneTasks/totalTasks*100)+'%' : '0%';
+
+  // routine completion (today)
+  const today = todayStr();
+  const todayR = getRoutinesForDate(today);
+  const doneR = todayR.filter(r=>r.doneDates.includes(today)).length;
+  document.getElementById('sRoutine').textContent = todayR.length ? Math.round(doneR/todayR.length*100)+'%' : '0%';
+
+  let totalMins=0; DB.study.forEach(s=>totalMins+=(+s.duration||0));
+  document.getElementById('sStudyHours').textContent = Math.round(totalMins/60*10)/10+'j';
+  document.getElementById('sWorkoutStreak').textContent = computeWorkoutStreak();
+  document.getElementById('sCompTotal').textContent = DB.competitions.length;
+  document.getElementById('sCompDone').textContent = DB.competitions.filter(c=>['Selesai','Menang','Tidak menang'].includes(c.status)).length;
+
+  // productivity = avg of routine%, PR%, workout weekly%
+  const [start,end] = weekRange();
+  let weekTotal=0, weekDone=0;
+  for(let d=new Date(start+'T00:00:00'); fmtDate(d)<=end; d.setDate(d.getDate()+1)){
+    const sc = WORKOUT_SCHEDULE[d.getDay()]; const ds=fmtDate(d);
+    weekTotal+=sc.exercises.length; weekDone+=(DB.workoutLog[ds]||[]).filter(x=>sc.exercises.some(e=>e.name===x)).length;
   }
-  $('#weekStrip').innerHTML = html;
-  $$('#weekStrip .day-chip').forEach(chip=>{
-    chip.addEventListener('click', ()=>{
-      const [y,m,d] = chip.dataset.key.split('-').map(Number);
-      currentWorkoutDate = new Date(y,m-1,d);
-      renderWorkoutPage();
-    });
-  });
-}
+  const workoutPct = weekTotal ? doneR/Math.max(todayR.length,1) : 0;
+  const prPct = totalTasks ? doneTasks/totalTasks : 0;
+  const wPct = weekTotal ? weekDone/weekTotal : 0;
+  const rPct = todayR.length ? doneR/todayR.length : 0;
+  const productivity = Math.round(((prPct+wPct+rPct)/3)*100);
+  document.getElementById('sProductivity').textContent = productivity+'%';
+  document.getElementById('sWeekProgress').textContent = weekTotal ? Math.round(wPct*100)+'%' : '0%';
 
-function tiktokEmbedHTML(url){
-  return `<blockquote class="tiktok-embed" cite="${url}" style="max-width:100%;min-width:280px;">
-    <section><a target="_blank" href="${url}">Buka video di TikTok ↗</a></section>
-  </blockquote>`;
-}
-function loadTiktokScript(){
-  const existing = document.getElementById('tiktok-embed-script');
-  if(existing) existing.remove();
-  const s = document.createElement('script');
-  s.id='tiktok-embed-script';
-  s.async = true;
-  s.src = 'https://www.tiktok.com/embed.js';
-  document.body.appendChild(s);
-}
-
-function renderWorkoutPage(){
-  renderWeekStrip();
-  const key = fmtKey(currentWorkoutDate);
-  const sched = scheduleFor(currentWorkoutDate);
-  const dowLabel = DOW_ID[currentWorkoutDate.getDay()];
-
-  $('#woTitle').textContent = `${dowLabel} — ${sched ? sched.focus : 'Rest Day'}`;
-  $('#woSub').textContent = `${currentWorkoutDate.getDate()} ${MONTH_ID[currentWorkoutDate.getMonth()]} ${currentWorkoutDate.getFullYear()}`;
-
-  const wo = workoutData[key] || {done:[]};
-
-  if(!sched){
-    $('#exerciseList').innerHTML = `<div class="rest-day"><div class="em">🌿</div><div>Hari istirahat. Fokus pemulihan otot & tidur cukup.</div></div>`;
-    $('#woProgLabel').textContent = 'Rest day';
-    $('#woProgFill').style.width = '100%';
-    return;
-  }
-
-  const total = sched.exercises.length;
-  const doneCount = wo.done.filter(i=>i<total).length;
-  $('#woProgLabel').textContent = `${doneCount} / ${total} selesai`;
-  $('#woProgFill').style.width = `${total? (doneCount/total*100):0}%`;
-
-  $('#exerciseList').innerHTML = sched.exercises.map((ex,idx)=>{
-    const isDone = wo.done.includes(idx);
-    return `<div class="ex-card">
-      <div class="ex-body">
-        <div class="ex-top">
-          <div>
-            <div class="ex-name">${ex.name}</div>
-            <div class="ex-meta">${ex.meta}</div>
-          </div>
-          <button class="ex-done-btn ${isDone?'done':''}" data-idx="${idx}">${isDone?'✔ Selesai':'Tandai selesai'}</button>
-        </div>
-        <div class="ex-video-toggle" data-idx="${idx}">▶ Lihat video contoh</div>
-        <div class="ex-video-wrap" id="vidwrap-${idx}"></div>
-      </div>
-    </div>`;
-  }).join('');
-
-  $$('.ex-done-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const idx = Number(btn.dataset.idx);
-      const w = workoutData[key] || {done:[]};
-      const pos = w.done.indexOf(idx);
-      if(pos>-1) w.done.splice(pos,1); else w.done.push(idx);
-      workoutData[key] = w;
-      saveJSON('workoutData', workoutData);
-
-      const allDone = w.done.filter(i=>i<total).length === total;
-      syncOlahragaHabit(key, allDone);
-
-      renderWorkoutPage();
-      renderDashboard();
-      renderCalendar();
-      renderStatistik();
-    });
-  });
-
-  $$('.ex-video-toggle').forEach(t=>{
-    t.addEventListener('click', ()=>{
-      const idx = t.dataset.idx;
-      const wrap = $('#vidwrap-'+idx);
-      const opening = !wrap.classList.contains('show');
-      wrap.classList.toggle('show');
-      t.textContent = opening ? '▲ Sembunyikan video' : '▶ Lihat video contoh';
-      if(opening && !wrap.dataset.loaded){
-        wrap.innerHTML = tiktokEmbedHTML(sched.exercises[idx].video);
-        wrap.dataset.loaded = '1';
-        loadTiktokScript();
-      }
-    });
-  });
-}
-
-/* ===================== WATER ===================== */
-const WATER_TIMES = ["07:00","09:00","11:00","13:00","15:00","17:00","19:00","21:00"];
-function renderWater(){
-  const w = waterData[todayKey] || {count:0};
-  $('#waterCount').textContent = w.count;
-  $('#waterBarFill').style.width = (w.count/8*100)+'%';
-
-  $('#glassGrid').innerHTML = WATER_TIMES.map((t,i)=>`
-    <div class="glass ${i<w.count?'filled':''}" data-idx="${i}">
-      <div class="cup"><div class="fill"></div></div>
-      <div class="time">${t}</div>
-    </div>`).join('');
-
-  $$('.glass').forEach(g=>{
-    g.addEventListener('click', ()=>{
-      const idx = Number(g.dataset.idx);
-      const cur = waterData[todayKey] || {count:0};
-      // toggle: clicking a filled glass that is the last filled removes it, else fills up to that glass
-      if(idx < cur.count){ cur.count = idx; }
-      else{ cur.count = idx+1; }
-      waterData[todayKey] = cur;
-      saveJSON('waterData', waterData);
-      renderWater();
-      renderDashboard();
-    });
-  });
-}
-$('#waterReset').addEventListener('click', ()=>{
-  waterData[todayKey] = {count:0};
-  saveJSON('waterData', waterData);
-  renderWater();
-  renderDashboard();
-});
-
-/* ===================== FINANCE ===================== */
-const CAT_ICON = {Makan:'🍚', Transport:'🚌', Jajan:'🍿', Lainnya:'🧾'};
-
-function renderFinance(){
-  $('#finDateLabel').textContent = `Catatan pengeluaran — ${today.getDate()} ${MONTH_ID[today.getMonth()]} ${today.getFullYear()}`;
-  const list = financeData[todayKey] || [];
-
-  $('#finList').innerHTML = list.length ? list.slice().reverse().map(t=>`
-    <div class="fin-item">
-      <div class="fi-icon">${CAT_ICON[t.category]||'🧾'}</div>
-      <div class="fi-mid">
-        <div class="fi-cat">${t.category}</div>
-        <div class="fi-note">${t.note ? t.note : t.time}</div>
-      </div>
-      <div class="fi-amount">${rupiah(t.amount)}</div>
-      <button class="fi-del" data-id="${t.id}">✕</button>
-    </div>`).join('') : `<div class="fin-empty">Belum ada transaksi hari ini.</div>`;
-
-  const total = list.reduce((s,t)=>s+t.amount,0);
-  $('#finTodayTotal').textContent = rupiah(total);
-
-  $$('.fi-del').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const id = btn.dataset.id;
-      financeData[todayKey] = (financeData[todayKey]||[]).filter(t=>String(t.id)!==id);
-      saveJSON('financeData', financeData);
-      renderFinance();
-      renderDashboard();
-    });
-  });
-
-  renderFinanceMonth();
-}
-
-$$('.cat-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    $$('.cat-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedCat = btn.dataset.cat;
-  });
-});
-
-$('#finAddBtn').addEventListener('click', ()=>{
-  const amountEl = $('#finAmount');
-  const amount = Number(amountEl.value);
-  if(!amount || amount<=0){ amountEl.focus(); amountEl.style.borderColor='var(--red)'; setTimeout(()=>amountEl.style.borderColor='',900); return; }
-  const note = $('#finNote').value.trim();
-  const now = new Date();
-  const entry = { id: Date.now(), amount, category:selectedCat, note, time: pad2(now.getHours())+':'+pad2(now.getMinutes()) };
-  financeData[todayKey] = financeData[todayKey] || [];
-  financeData[todayKey].push(entry);
-  saveJSON('financeData', financeData);
-  amountEl.value=''; $('#finNote').value='';
-  renderFinance();
-  renderDashboard();
-});
-
-function renderFinanceMonth(){
-  const y = today.getFullYear(), m = today.getMonth();
-  const daysInMonth = new Date(y,m+1,0).getDate();
-  let monthTotal = 0, daysWithData = 0;
-  const catTotals = {Makan:0,Transport:0,Jajan:0,Lainnya:0};
-
-  for(let day=1; day<=daysInMonth; day++){
-    const key = `${y}-${pad2(m+1)}-${pad2(day)}`;
-    const list = financeData[key];
-    if(list && list.length){
-      daysWithData++;
-      list.forEach(t=>{ monthTotal += t.amount; catTotals[t.category] = (catTotals[t.category]||0)+t.amount; });
-    }
-  }
-  const avg = daysWithData ? monthTotal/daysWithData : 0;
-  let topCat = 'Belum ada data'; let topVal = -1;
-  Object.entries(catTotals).forEach(([c,v])=>{ if(v>topVal){topVal=v; topCat=c;} });
-  if(monthTotal===0) topCat='Belum ada data';
-
-  $('#finMonthStats').innerHTML = `
-    <div class="mini-stat"><div class="v">${rupiah(monthTotal)}</div><div class="l">Total bulan ini</div></div>
-    <div class="mini-stat"><div class="v">${rupiah(avg)}</div><div class="l">Rata-rata / hari</div></div>
-    <div class="mini-stat"><div class="v">${topCat}</div><div class="l">Kategori terbesar</div></div>
-  `;
-
-  const maxCat = Math.max(1, ...Object.values(catTotals));
-  $('#finChart').innerHTML = Object.entries(catTotals).map(([c,v])=>`
-    <div class="bar-row">
-      <div class="bl">${CAT_ICON[c]} ${c}</div>
-      <div class="btrack"><div style="width:${v/maxCat*100}%"></div></div>
-      <div class="bv">${rupiah(v)}</div>
-    </div>`).join('');
-}
-
-/* ===================== STATISTIK ===================== */
-function renderStatistik(){
-  let green=0, yellow=0, red=0;
-  const days=[];
+  // bar chart 7 days routine completion
+  const bar = document.getElementById('barChart7');
+  let barHtml = '';
   for(let i=6;i>=0;i--){
-    const d = new Date(today); d.setDate(today.getDate()-i);
-    const key = fmtKey(d);
-    const status = habitStatus(key);
-    if(status==='green') green++;
-    else if(status==='yellow') yellow++;
-    else red++;
-    days.push({d, status});
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const ds = fmtDate(d);
+    const items = getRoutinesForDate(ds);
+    const done = items.filter(r=>r.doneDates.includes(ds)).length;
+    const pct = items.length ? Math.round(done/items.length*100) : 0;
+    barHtml += `<div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; height:100%; justify-content:flex-end;">
+      <div style="width:100%; max-width:28px; background:var(--surface-2); border-radius:6px; height:${Math.max(pct,3)}%; background:${pct>0?'var(--brand)':'var(--surface-2)'}; transition:height .4s;"></div>
+      <div style="font-size:10px; color:var(--text-faint); font-weight:700;">${DOW_ID[d.getDay()].slice(0,3)}</div>
+    </div>`;
   }
-  $('#statGreen').textContent = green;
-  $('#statYellow').textContent = yellow;
-  $('#statRed').textContent = red;
+  bar.innerHTML = barHtml;
 
-  const pct = Math.round(green/7*100);
-  $('#statPctLabel').textContent = pct+'%';
-  $('#statPctBar').style.width = pct+'%';
-  $('#statPctBar').style.background = pct>=70 ? 'var(--green)' : pct>=35 ? 'var(--yellow)' : 'var(--red)';
-
-  const first = days[0].d, last = days[6].d;
-  $('#statRange').textContent = `${first.getDate()} ${MONTH_ID[first.getMonth()]} — ${last.getDate()} ${MONTH_ID[last.getMonth()]}`;
-
-  $('#weekMini').innerHTML = days.map(({d,status})=>{
-    const bg = status==='green'?'var(--green)':status==='yellow'?'var(--yellow)':'var(--red-tint)';
-    const color = status==='red' ? 'var(--red)' : bg;
-    return `<div class="wm-day"><div class="wm-dot" style="background:${status==='green'?'var(--green)':status==='yellow'?'var(--yellow)':(status==='red'?'var(--red)':'#E4E1F0')}"></div><div class="wm-lbl">${DOW_SHORT[d.getDay()]}</div></div>`;
-  }).join('');
-
-  let em, title, desc;
-  if(green>=5){ em='🔥'; title='Konsisten banget!'; desc='Kamu berhasil menyelesaikan semua habit di sebagian besar hari minggu ini. Pertahankan ritme ini!'; }
-  else if(green>=2 || yellow>=3){ em='⚠️'; title='Perlu sedikit perbaikan'; desc='Progres kamu cukup baik, tapi masih ada hari yang belum maksimal. Coba fokus di 1-2 habit dulu setiap hari.'; }
-  else{ em='🚨'; title='Saatnya lebih disiplin'; desc='Minggu ini masih banyak hari kosong. Mulai dari hal kecil — checklist satu habit saja hari ini.'; }
-  $('#insightCard').innerHTML = `<div class="em">${em}</div><div><h4>${title}</h4><p>${desc}</p></div>`;
+  // monthly calendar stats
+  const y = new Date().getFullYear(), m = new Date().getMonth();
+  const daysInMonth = new Date(y,m+1,0).getDate();
+  let g=0,r=0,gray=0;
+  for(let d=1; d<=daysInMonth; d++){
+    const ds = fmtDate(new Date(y,m,d));
+    const st = DB.calendar[ds]?.status;
+    if(st==='green') g++; else if(st==='red') r++; else gray++;
+  }
+  document.getElementById('mGreen').textContent = g;
+  document.getElementById('mRed').textContent = r;
+  document.getElementById('mGray').textContent = gray;
 }
 
-/* ===================== INIT ===================== */
-renderDashboard();
-renderCalendar();
-renderWorkoutPage();
-renderWater();
-renderFinance();
-renderStatistik();
+/* ============================== SETTINGS ============================== */
+function loadSettingsUI(){
+  document.getElementById('setName').value = DB.settings.name || '';
+  document.getElementById('setNotifOn').checked = !!DB.settings.notifOn;
+  document.getElementById('setReminderTime').value = DB.settings.reminderTime || '19:00';
+  document.getElementById('setH1').checked = DB.settings.h1!==false;
+  document.getElementById('setH3').checked = DB.settings.h3!==false;
+}
+function saveProfile(){
+  DB.settings.name = document.getElementById('setName').value.trim() || 'Kamu';
+  persist('settings'); renderDashboard(); toast('Profil disimpan');
+}
+function saveSettingsFields(){
+  DB.settings.reminderTime = document.getElementById('setReminderTime').value;
+  DB.settings.h1 = document.getElementById('setH1').checked;
+  DB.settings.h3 = document.getElementById('setH3').checked;
+  persist('settings'); toast('Pengaturan disimpan');
+}
+function toggleNotif(){
+  const on = document.getElementById('setNotifOn').checked;
+  if(on && 'Notification' in window && Notification.permission!=='granted'){
+    Notification.requestPermission().then(perm=>{
+      DB.settings.notifOn = perm==='granted';
+      document.getElementById('setNotifOn').checked = DB.settings.notifOn;
+      persist('settings');
+      toast(DB.settings.notifOn ? 'Notifikasi diaktifkan' : 'Izin notifikasi ditolak, akan pakai notifikasi dalam aplikasi');
+    });
+  } else {
+    DB.settings.notifOn = on; persist('settings'); toast(on?'Notifikasi diaktifkan':'Notifikasi dimatikan');
+  }
+}
+function exportData(silent){
+  const payload = {}; DB_KEYS.forEach(k=>payload[k]=DB[k]);
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = `daily-routine-backup-${todayStr()}.json`;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  if(!silent) toast('Data berhasil di-export');
+  else toast('Backup berhasil dibuat');
+}
+function importData(e){
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    try{
+      const data = JSON.parse(ev.target.result);
+      DB_KEYS.forEach(k=>{ if(data[k]!==undefined){ DB[k]=data[k]; persist(k);} });
+      toast('Data berhasil di-import'); applyTheme(); loadSettingsUI(); renderAll();
+    }catch(err){ toast('File tidak valid'); }
+  };
+  reader.readAsText(file);
+  e.target.value='';
+}
+function confirmReset(){
+  if(!confirm('Yakin ingin mereset seluruh aplikasi? Semua data akan dihapus permanen.')) return;
+  if(!confirm('Konfirmasi sekali lagi: hapus SEMUA data?')) return;
+  DB_KEYS.forEach(k=>{ DB[k]=structuredClone(DEFAULTS[k]); persist(k); });
+  seedWorkoutIfNeeded(); applyTheme(); loadSettingsUI(); renderAll();
+  toast('Aplikasi telah direset');
+}
 
-})();
+/* ============================== NOTIFICATION ENGINE ============================== */
+function checkAndNotify(){
+  if(!DB.settings.notifOn) return;
+  const now = new Date();
+  const hhmm = now.toTimeString().slice(0,5);
+  const today = todayStr();
+  const firedKey = 'dr_fired_'+today;
+  let fired = JSON.parse(sessionStorage.getItem(firedKey)||'[]');
+  function fire(id, title, body){
+    if(fired.includes(id)) return;
+    fired.push(id); sessionStorage.setItem(firedKey, JSON.stringify(fired));
+    sendNotification(title, body);
+  }
+  if(hhmm === DB.settings.reminderTime){
+    fire('daily-'+DB.settings.reminderTime, '⏰ Waktunya cek rutinitasmu!', 'Yuk lihat Daily Routine hari ini di Daily Routine.');
+  }
+  DB.tasks.forEach(t=>{
+    if(t.status==='Selesai' || !t.deadline) return;
+    const d = daysUntil(t.deadline);
+    if(d===1 && DB.settings.h1) fire('pr-h1-'+t.id, '⚠️ PR deadline besok!', `${t.name} (${t.subject}) harus selesai besok.`);
+    if(d===3 && DB.settings.h3) fire('pr-h3-'+t.id, '📝 PR deadline 3 hari lagi', `${t.name} (${t.subject})`);
+  });
+  DB.competitions.forEach(c=>{
+    if(['Selesai','Menang','Tidak menang'].includes(c.status)) return;
+    const dl = c.regDeadline || c.submitDeadline; if(!dl) return;
+    const d = daysUntil(dl);
+    if(d===1 && DB.settings.h1) fire('comp-h1-'+c.id, '🔥 Deadline lomba tinggal 1 hari!', c.name);
+    if(d===3 && DB.settings.h3) fire('comp-h3-'+c.id, '🏆 Deadline lomba 3 hari lagi', c.name);
+  });
+  const dow = now.getDay();
+  const sched = WORKOUT_SCHEDULE[dow];
+  if(sched.exercises.length && hhmm==='16:00'){
+    fire('workout-'+today, '🏋️ Workout hari ini', sched.exercises.map(e=>e.name).join(' + '));
+  }
+}
+function sendNotification(title, body){
+  if('Notification' in window && Notification.permission==='granted'){
+    try{ new Notification(title, {body, icon:''}); }catch(e){ toast(title+' — '+body); }
+  } else {
+    toast(title+' — '+body);
+  }
+}
+setInterval(checkAndNotify, 30000);
+
+/* ============================== SEED / INIT ============================== */
+function seedWorkoutIfNeeded(){
+  // workout schedule is constant WORKOUT_SCHEDULE; nothing to seed into DB besides log which starts empty.
+}
+function renderAll(){
+  renderDashboard();
+  if(currentView==='calendar') renderCalendar();
+  if(currentView==='routine') renderRoutine();
+  if(currentView==='water') renderWater();
+  if(currentView==='tasks') renderTasks();
+  if(currentView==='study') renderStudy();
+  if(currentView==='workout') renderWorkout();
+  if(currentView==='competitions') renderCompetitions();
+  if(currentView==='stats') renderStats();
+  if(currentView==='settings') loadSettingsUI();
+}
+function init(){
+  buildNav();
+  setupSwipeNavigation();
+  applyTheme();
+  renderCalendar();
+  loadSettingsUI();
+  goto('dashboard');
+  checkAndNotify();
+}
+init();
 </script>
 </body>
 </html>
